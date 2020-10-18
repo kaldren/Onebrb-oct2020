@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/src/Onebrb.Data/Onebrb.db
+/src/Onebrb.Data/Onebrb.db-wal
+/src/Onebrb.Data/Onebrb.db-shm
