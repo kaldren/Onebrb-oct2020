@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Onebrb.Core.Models.Item;
+using Onebrb.Core.Models;
+using Onebrb.Data.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Onebrb.Data
 {
-    public class OnebrbContext : DbContext
+    public class OnebrbContext : DbContext, IOnebrbContext
     {
         public OnebrbContext(DbContextOptions<OnebrbContext> options) 
             : base(options)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Onebrb.Core.Models.Item
+namespace Onebrb.Core.Models
 {
     public class Item
     {

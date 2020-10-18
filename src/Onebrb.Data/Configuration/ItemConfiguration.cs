@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Onebrb.Core.Models.Item;
+using Onebrb.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Onebrb.Data
+namespace Onebrb.Data.Configuration
 {
     public class ItemConfiguration : IEntityTypeConfiguration<Item>
     {
