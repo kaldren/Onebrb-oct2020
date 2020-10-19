@@ -1,6 +1,6 @@
 ﻿namespace Onebrb.Data
 {
-    internal interface IOnebrbContext
+    public interface IOnebrbContext
     {
     }
 }

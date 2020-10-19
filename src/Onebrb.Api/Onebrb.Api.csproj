@@ -4,5 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Onebrb.db" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Onebrb.Service\Onebrb.Service.csproj" />
+  </ItemGroup>
+
 
 </Project>

@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Onebrb.Data;
+using Onebrb.Service.Services;
 
 namespace Onebrb.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
         }
@@ -26,6 +29,12 @@ namespace Onebrb.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // TODO: Make db path futureproof
+            services.AddDbContext<OnebrbContext>(options => options.UseSqlite(@"Data Source=C:\Users\drens\source\repos\October2020\Onebrb\src\Onebrb.Data\Onebrb.db"));
+
+            services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<IOnebrbContext, OnebrbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
