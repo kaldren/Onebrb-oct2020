@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Onebrb.Api\Onebrb.Api.csproj" />
     <ProjectReference Include="..\Client\Onebrb.SPA.Client.csproj" />
     <ProjectReference Include="..\Shared\Onebrb.SPA.Shared.csproj" />
   </ItemGroup>

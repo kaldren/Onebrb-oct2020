@@ -1,0 +1,30 @@
+﻿@page "/items"
+@using Onebrb.SPA.Shared.Models
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject HttpClient Http
+
+@if (item == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>@item.Title</p>
+}
+
+@code {
+    private ItemModel item;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            item = await Http.GetFromJsonAsync<ItemModel>("Items");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}
