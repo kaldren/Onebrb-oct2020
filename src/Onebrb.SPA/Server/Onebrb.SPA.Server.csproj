@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>Onebrb.SPA.Server-24F74050-9509-4C89-9193-FF0A54C02871</UserSecretsId>
+    <UserSecretsId>Onebrb.SPA.Server-14B4C048-38F4-4BB5-9ED5-4C030011285A</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Client\Onebrb.SPA.Client.csproj" />
     <ProjectReference Include="..\Shared\Onebrb.SPA.Shared.csproj" />
   </ItemGroup>
 
