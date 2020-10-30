@@ -18,6 +18,8 @@ namespace Onebrb.Api
 {
     public class Startup
     {
+        private readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
@@ -32,6 +34,21 @@ namespace Onebrb.Api
 
             // TODO: Make db path futureproof
             services.AddDbContext<OnebrbContext>(options => options.UseSqlite(@"Data Source=C:\Users\drens\source\repos\October2020\Onebrb\src\Onebrb.Data\Onebrb.db"));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder
+                        .WithOrigins("https://localhost:44362", "https://localhost:44307")
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    }
+                );
+            });
 
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<IOnebrbContext, OnebrbContext>();
@@ -48,6 +65,8 @@ namespace Onebrb.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 

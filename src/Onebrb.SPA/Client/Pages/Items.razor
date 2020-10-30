@@ -1,11 +1,38 @@
 ﻿@page "/items"
+@page "/items/{id:long}"
 @attribute [Authorize]
 @inject HttpClient Http
 @using Microsoft.AspNetCore.Authorization
 @using System.Net.Http
+@using Onebrb.SPA.Shared.Models 
 
 <h3>Items</h3>
 
-@code {
+<div>
+    @if (items == null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        // Check if there are items returned
+        @foreach (var item in items)
+        {
+            <p>@item.Title</p>
+        }
+    }
+</div>
 
+@code {
+    [Parameter]
+    public long id { get; set; }
+    private Item[] items;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (id > 0)
+        {
+            items = await Http.GetFromJsonAsync<Item[]>($"https://localhost:44307/api/items/{id}");
+        }
+    }
 }
