@@ -1,5 +1,5 @@
 ﻿@page "/items"
-@page "/items/{id:long}"
+@page "/items/{Id:long}"
 @attribute [Authorize]
 @inject HttpClient Http
 @using Microsoft.AspNetCore.Authorization
@@ -9,14 +9,17 @@
 <h3>Items</h3>
 
 <div>
-    @if (items == null)
+    @if (Id == long.MinValue)
     {
-        <p>Loading...</p>
+        // No item route provided - show generic items page data
+        <p>@LoadingMessage</p>
     }
     else
     {
+        // Item route was provided
+
         // Check if there are items returned
-        @foreach (var item in items)
+        if (ItemReturned)
         {
             <p>@item.Title</p>
         }
@@ -25,14 +28,22 @@
 
 @code {
     [Parameter]
-    public long id { get; set; }
-    private Item[] items;
+    public long Id { get; set; } = long.MinValue;
+    public bool ItemReturned { get; set; }
+    public string LoadingMessage { get; set; }
+    private Item item;
 
     protected override async Task OnInitializedAsync()
     {
-        if (id > 0)
+        if (Id > 0)
         {
-            items = await Http.GetFromJsonAsync<Item[]>($"https://localhost:44307/api/items/{id}");
+            LoadingMessage = "Loading... Please wait.";
+            item = await Http.GetFromJsonAsync<Item>($"https://localhost:44307/api/items/{Id}");
+            ItemReturned = (item != null);
+        }
+        else
+        {
+            LoadingMessage = "Look around for something cool to buy... :)";
         }
     }
 }
