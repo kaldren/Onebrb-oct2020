@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Onebrb.Service;
-using Onebrb.Service.Services;
+using Onebrb.Services;
+using Onebrb.Services.Services;
 
 namespace Onebrb.Api.Controllers
 {

@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Onebrb.Data;
-using Onebrb.Service.Services;
+using Onebrb.Services.Services;
 
 namespace Onebrb.Api
 {
