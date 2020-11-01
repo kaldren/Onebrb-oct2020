@@ -32,5 +32,28 @@ namespace Onebrb.Services.Tests
 
             Assert.Null(result);
         }
+
+        [Fact]
+        public async void GetItemAsync_ItemIdFound_ShouldReturnItemServiceModel()
+        {
+            long itemId = 100;
+
+            var item = new Item { 
+                Id = itemId
+            };
+
+            var itemServiceModel = new ItemServiceModel
+            {
+                Id = itemId,
+            };
+
+            _onebrbContext.Setup(x => x.GetItemAsync(itemId))
+                .ReturnsAsync(item);
+
+            ItemServiceModel result = await _itemService.GetItemAsync(itemId);
+
+            Assert.NotNull(result);
+            Assert.Equal(result.Id, item.Id);
+        }
     }
 }
