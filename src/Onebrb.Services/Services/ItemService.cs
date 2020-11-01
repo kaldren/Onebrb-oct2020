@@ -8,16 +8,16 @@ namespace Onebrb.Services.Services
 {
     public class ItemService : IItemService
     {
-        private readonly OnebrbContext _onebrbContext;
+        private readonly IOnebrbContext _onebrbContext;
 
-        public ItemService(OnebrbContext onebrbContext)
+        public ItemService(IOnebrbContext onebrbContext)
         {
             _onebrbContext = onebrbContext;
         }
 
-        public async Task<ItemServiceModel> GetItemOrDefaultAsync(long itemId)
+        public async Task<ItemServiceModel> GetItemAsync(long itemId)
         {
-            Item item = await _onebrbContext.Items.SingleOrDefaultAsync(x => x.Id == itemId);
+            Item item = await _onebrbContext.GetItemAsync(itemId);
 
             if (item == null)
             {
