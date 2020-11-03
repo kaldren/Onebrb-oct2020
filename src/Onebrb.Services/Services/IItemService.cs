@@ -8,5 +8,6 @@ namespace Onebrb.Services.Services
     public interface IItemService
     {
         Task<ItemServiceModel> GetItemAsync(long itemId);
+        Task<ICollection<ItemServiceModel>> GetItemsAsync(string userId);
     }
 }

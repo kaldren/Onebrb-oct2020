@@ -3,6 +3,7 @@ using Onebrb.Data;
 using Onebrb.Core.Models;
 using Onebrb.Services.Mapping;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Onebrb.Services.Services
 {
@@ -25,6 +26,18 @@ namespace Onebrb.Services.Services
             }
 
             return ObjectMapper.Mapper.Map<ItemServiceModel>(item);
+        }
+
+        public async Task<ICollection<ItemServiceModel>> GetItemsAsync(string userId)
+        {
+            var items = await _onebrbContext.GetItemsAsync(userId);
+
+            if (items is null)
+            {
+                return null;
+            }
+
+            return ObjectMapper.Mapper.Map<ICollection<ItemServiceModel>>(items);
         }
     }
 }

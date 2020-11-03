@@ -23,7 +23,7 @@ namespace Onebrb.Api.Controllers
         [HttpGet("{itemId}")]
         public async Task<ActionResult<ItemServiceModel>> Get(long itemId)
         {
-            return await _itemService.GetItemOrDefaultAsync(itemId);
+            return await _itemService.GetItemAsync(itemId);
         }
     }
 }

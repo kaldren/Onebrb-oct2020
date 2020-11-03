@@ -55,5 +55,13 @@ namespace Onebrb.Services.Tests
             Assert.NotNull(result);
             Assert.Equal(result.Id, item.Id);
         }
+
+        [Fact]
+        public async void GetItemsAsync_UserNotFound_ShouldReturnNull()
+        {
+            ICollection<ItemServiceModel> result = await _itemService.GetItemsAsync(It.IsAny<string>());
+
+            Assert.NotNull(result);
+        }
     }
 }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Onebrb.Data;
 
 namespace Onebrb.Data.Migrations
 {
     [DbContext(typeof(OnebrbContext))]
-    partial class OnebrbContextModelSnapshot : ModelSnapshot
+    [Migration("20201102053458_User")]
+    partial class User
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,9 +24,6 @@ namespace Onebrb.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("Id")
                         .HasColumnType("integer");
-
-                    b.Property<string>("CreatorId")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
