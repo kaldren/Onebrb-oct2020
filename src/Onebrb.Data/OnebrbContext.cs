@@ -27,7 +27,7 @@ namespace Onebrb.Data
 
         public async Task<ICollection<Item>> GetItemsAsync(string userId)
         {
-            User user = null; // await this.Users.SingleOrDefaultAsync(x => x.CreatorId == userId);
+            User user =  await this.Users.SingleOrDefaultAsync(x => x.Id == userId);
             
             if (user is null)
             {
