@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Onebrb.Api.Data;
 using Onebrb.Data;
 using Onebrb.Services.Services;
 
@@ -35,7 +34,7 @@ namespace Onebrb.Api
             services.AddControllers();
 
             // TODO: Make db path futureproof
-            services.AddDbContext<OnebrbContext>(options => options.UseSqlite(@"Data Source=C:\Users\drens\source\repos\October2020\Onebrb\src\Onebrb.Data\Onebrb.db"));
+            //services.AddDbContext<OnebrbContext>(options => options.UseSqlite(@"Data Source=C:\Users\drens\source\repos\October2020\Onebrb\src\Onebrb.Data\Onebrb.db"));
 
             services.AddCors(options =>
             {
@@ -52,10 +51,10 @@ namespace Onebrb.Api
                 );
             });
 
-            services.AddDbContext<ApiDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlConnection")));
+            services.AddDbContext<OnebrbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlConnection")));
 
             services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                            .AddEntityFrameworkStores<ApiDbContext>();
+                            .AddEntityFrameworkStores<OnebrbContext>();
 
 
             services.AddTransient<IItemService, ItemService>();

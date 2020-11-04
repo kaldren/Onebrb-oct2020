@@ -22,7 +22,7 @@ namespace Onebrb.Data
         public OnebrbContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<OnebrbContext>();
-            builder.UseSqlite(Configuration.GetConnectionString("MSSQLDatabase"));
+            builder.UseSqlServer(Configuration.GetConnectionString("SqlConnection"));
 
             return new OnebrbContext(builder.Options);
         }

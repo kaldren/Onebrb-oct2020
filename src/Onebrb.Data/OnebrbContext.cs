@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Onebrb.Core.Models;
 using Onebrb.Data.Configuration;
 using System;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Onebrb.Data
 {
-    public class OnebrbContext : DbContext, IOnebrbContext
+    public class OnebrbContext : IdentityDbContext<User>, IOnebrbContext
     {
         public OnebrbContext(DbContextOptions<OnebrbContext> options) 
             : base(options)
@@ -17,7 +19,6 @@ namespace Onebrb.Data
         }
 
         public DbSet<Item> Items { get; set; }
-        public DbSet<User> Users { get; set; }
 
         public async Task<Item> GetItemAsync(long itemId)
         {
@@ -26,18 +27,19 @@ namespace Onebrb.Data
 
         public async Task<ICollection<Item>> GetItemsAsync(string userId)
         {
-            User user = await this.Users.SingleOrDefaultAsync(x => x.CreatorId == userId);
+            User user = null; // await this.Users.SingleOrDefaultAsync(x => x.CreatorId == userId);
             
             if (user is null)
             {
                 return null;
             }
 
-            return await this.Items.Where(x => x.CreatorId == userId).ToListAsync();
+            return await this.Items.Where(x => x.UserId == userId).ToListAsync();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ItemConfiguration());
         }
     }
