@@ -2,12 +2,13 @@
 
 namespace Onebrb.Services.Tests
 {
-    public class BaseTests
+    public abstract class BaseTests
     {
         protected static readonly Fixture DataGenerator = new Fixture();
 
         public BaseTests()
         {
+
         }
     }
 }
