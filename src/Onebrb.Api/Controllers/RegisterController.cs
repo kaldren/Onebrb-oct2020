@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Onebrb.Core.Models;
 
 namespace Onebrb.Api.Controllers
 {
@@ -11,19 +12,21 @@ namespace Onebrb.Api.Controllers
     [ApiController]
     public class RegisterController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public RegisterController(UserManager<IdentityUser> userManager)
+        public RegisterController(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
 
         public async Task<bool> PostAsync()
         {
-            var user = new IdentityUser
+            var user = new User
             {
                 UserName = "admin",
                 Email = "drenski666@gmail.com",
+                FirstName = "Kaloyan",
+                LastName = "Drenski"
             };
 
             var result = await _userManager.CreateAsync(user, "Parola123-");

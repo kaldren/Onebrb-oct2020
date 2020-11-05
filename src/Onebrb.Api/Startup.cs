@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Onebrb.Core.Models;
 using Onebrb.Data;
 using Onebrb.Services.Services;
 
@@ -53,7 +54,7 @@ namespace Onebrb.Api
 
             services.AddDbContext<OnebrbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                             .AddEntityFrameworkStores<OnebrbContext>();
 
 
