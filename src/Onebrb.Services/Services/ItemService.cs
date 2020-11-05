@@ -30,7 +30,7 @@ namespace Onebrb.Services.Services
 
         public async Task<ICollection<ItemServiceModel>> GetItemsAsync(string userId)
         {
-            var items = await _onebrbContext.GetItemsAsync(userId);
+            ICollection<Item> items = await _onebrbContext.GetItemsAsync(userId);
 
             if (items is null)
             {
