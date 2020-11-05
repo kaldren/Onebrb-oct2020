@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using AutoFixture;
+using Moq;
 using Onebrb.Core.Models;
 using Onebrb.Data;
 using Onebrb.Services.Services;
@@ -9,7 +10,7 @@ using Xunit;
 
 namespace Onebrb.Services.Tests
 {
-    public class ItemServiceTests
+    public class ItemServiceTests : BaseItemServiceTests
     {
         private readonly IItemService _itemService;
         private readonly Mock<IOnebrbContext> _onebrbContext;
@@ -23,7 +24,7 @@ namespace Onebrb.Services.Tests
         [Fact]
         public async void GetItemAsync_ItemIdNotFound_ShouldReturnNull()
         {
-            long itemId = 100;
+            long itemId = DataGenerator.Create<long>();
 
             _onebrbContext.Setup(x => x.GetItemAsync(It.IsAny<long>()))
                 .ReturnsAsync(() => null);
