@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Onebrb.Api.Constants;
 using Onebrb.Core.Models;
+using Onebrb.Core.RequestModels;
+using Onebrb.Core.ResponseModels;
 
 namespace Onebrb.Api.Controllers
 {
@@ -13,25 +17,29 @@ namespace Onebrb.Api.Controllers
     public class RegisterController : Controller
     {
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public RegisterController(UserManager<User> userManager)
+        public RegisterController(UserManager<User> userManager, IMapper mapper)
         {
             _userManager = userManager;
+            _mapper = mapper;
         }
 
-        public async Task<bool> PostAsync()
+        [HttpPost]
+        public async Task<IActionResult> PostAsync(UserRequestModel requestModel)
         {
-            var user = new User
+            var user = _mapper.Map<User>(requestModel);
+
+            var result = await _userManager.CreateAsync(user, requestModel.Password);
+
+            if (!result.Succeeded)
             {
-                UserName = "admin",
-                Email = "drenski666@gmail.com",
-                FirstName = "Kaloyan",
-                LastName = "Drenski"
-            };
+                return BadRequest(ResponseMessages.BadRequestCouldntCreateAccount);
+            }
 
-            var result = await _userManager.CreateAsync(user, "Parola123-");
+            var response = _mapper.Map<UserResponseModel>(requestModel);
 
-            return result.Succeeded;
+            return Created($"api/users/{response.UserName}", response);
         }
     }
 }

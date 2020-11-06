@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 
-namespace Onebrb.Services.Tests
+namespace Onebrb.Services.Tests.ItemServiceTests
 {
     public class ItemServiceTests : BaseItemServiceTests
     {

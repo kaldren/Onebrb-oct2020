@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Onebrb.Services.Tests
+namespace Onebrb.Services.Tests.ItemServiceTests
 {
     public class BaseItemServiceTests : BaseTests
     {
