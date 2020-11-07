@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Onebrb.Core.Models;
 using Onebrb.Services;
+using Onebrb.Services.Models;
 using Onebrb.Services.Services;
 
 namespace Onebrb.Api.Controllers
@@ -14,10 +18,12 @@ namespace Onebrb.Api.Controllers
     public class ItemsController : ControllerBase
     {
         private readonly IItemService _itemService;
+        private readonly UserManager<User> _userManager;
 
-        public ItemsController(IItemService itemService)
+        public ItemsController(IItemService itemService, UserManager<User> userManager)
         {
             _itemService = itemService;
+            _userManager = userManager;
         }
 
         [HttpGet("{itemId:int}")]
@@ -44,6 +50,42 @@ namespace Onebrb.Api.Controllers
             }
 
             return Ok(items);
+        }
+
+        [HttpDelete("{itemId:int}")]
+        [Authorize]
+        public async Task<IActionResult> Delete(int itemId)
+        {
+            // Check who the current user requesting deletion is
+            User currentUser = await this._userManager.GetUserAsync(this.User);
+
+            // Check if item exists
+            ItemServiceModel item = await this._itemService.GetItemAsync(itemId);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the item is hes/hers to delete
+            if (item.User.Id != currentUser.Id)
+            {
+                return Unauthorized();
+            }
+
+            // Delete
+            bool result = await this._itemService.Delete(new DeleteItemModel
+            {
+                ItemId = itemId,
+                UserId = currentUser.Id
+            });
+
+            if (!result)
+            {
+                return StatusCode(500);
+            }
+
+            return Ok(item);
         }
     }
 }

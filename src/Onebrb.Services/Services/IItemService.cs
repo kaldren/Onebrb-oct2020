@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Onebrb.Services.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,5 +10,6 @@ namespace Onebrb.Services.Services
     {
         Task<ItemServiceModel> GetItemAsync(int itemId);
         Task<ICollection<ItemServiceModel>> GetItemsAsync(string username);
+        Task<bool> Delete(DeleteItemModel model);
     }
 }

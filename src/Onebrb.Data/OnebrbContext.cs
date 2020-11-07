@@ -42,5 +42,20 @@ namespace Onebrb.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ItemConfiguration());
         }
+
+        public async Task<bool> DeleteAsync(int itemId)
+        {
+            Item item = await this.Items.FirstOrDefaultAsync(x => x.Id == itemId);
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            this.Items.Remove(item);
+            int result = await this.SaveChangesAsync();
+
+            return result > 0;
+        }
     }
 }
