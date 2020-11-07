@@ -16,7 +16,7 @@ namespace Onebrb.Services.Services
             _onebrbContext = onebrbContext;
         }
 
-        public async Task<ItemServiceModel> GetItemAsync(long itemId)
+        public async Task<ItemServiceModel> GetItemAsync(int itemId)
         {
             Item item = await _onebrbContext.GetItemAsync(itemId);
 

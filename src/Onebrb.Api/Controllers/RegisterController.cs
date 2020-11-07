@@ -39,7 +39,7 @@ namespace Onebrb.Api.Controllers
 
             var response = _mapper.Map<UserResponseModel>(requestModel);
 
-            return Created($"api/users/{response.UserName}", response);
+            return Created($"{ApiEndpoints.Users}/{response.UserName}", response);
         }
     }
 }

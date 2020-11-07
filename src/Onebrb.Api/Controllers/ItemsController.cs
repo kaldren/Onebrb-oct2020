@@ -21,7 +21,7 @@ namespace Onebrb.Api.Controllers
         }
 
         [HttpGet("{itemId}")]
-        public async Task<ActionResult<ItemServiceModel>> Get(long itemId)
+        public async Task<ActionResult<ItemServiceModel>> Get(int itemId)
         {
             return await _itemService.GetItemAsync(itemId);
         }

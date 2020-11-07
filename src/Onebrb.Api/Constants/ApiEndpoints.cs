@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Onebrb.Api.Constants
 {
-    public static class ResponseMessages
+    public static class ApiEndpoints
     {
-        public const string BadRequestCouldntCreateAccount = "Bad Request. Couldn't create an account.";
+        public const string Users = "api/users";
     }
 }
