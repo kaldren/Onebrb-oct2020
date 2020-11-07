@@ -5,6 +5,7 @@ using Onebrb.Data;
 using Onebrb.Services.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -61,6 +62,21 @@ namespace Onebrb.Services.Tests.ItemServiceTests
             ICollection<ItemServiceModel> result = await _itemService.GetItemsAsync(It.IsAny<string>());
 
             Assert.Null(result);
+        }
+
+        [Fact]
+        public void GetItemsAsync_UserFound_ShouldReturnAllItemsByUsername()
+        {
+            var fakeUsername = DataGenerator.Create<string>();
+            var fakeUser = new User { UserName = fakeUsername };
+            var fakeItems = DataGenerator.CreateMany<Item>(3).ToList();
+
+            fakeItems.ForEach(x => x.User = fakeUser);
+
+            this._onebrbContext.Setup(x => x.GetItemsAsync(fakeUsername))
+                .ReturnsAsync(fakeItems);
+
+            Assert.True(fakeItems.TrueForAll(x => x.User == fakeUser));
         }
     }
 }
