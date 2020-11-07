@@ -25,16 +25,16 @@ namespace Onebrb.Data
             return await this.Items.SingleOrDefaultAsync(x => x.Id == itemId);
         }
 
-        public async Task<ICollection<Item>> GetItemsAsync(string userId)
+        public async Task<ICollection<Item>> GetItemsAsync(string username)
         {
-            User user =  await this.Users.SingleOrDefaultAsync(x => x.Id == userId);
+            User user =  await this.Users.SingleOrDefaultAsync(x => x.UserName == username);
             
-            if (user is null)
+            if (user == null)
             {
                 return null;
             }
 
-            return await this.Items.Where(x => x.UserId == userId).ToListAsync();
+            return await this.Items.Where(x => x.UserId == user.Id).ToListAsync();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

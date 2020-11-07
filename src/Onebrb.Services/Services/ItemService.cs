@@ -28,11 +28,11 @@ namespace Onebrb.Services.Services
             return ObjectMapper.Mapper.Map<ItemServiceModel>(item);
         }
 
-        public async Task<ICollection<ItemServiceModel>> GetItemsAsync(string userId)
+        public async Task<ICollection<ItemServiceModel>> GetItemsAsync(string username)
         {
-            ICollection<Item> items = await _onebrbContext.GetItemsAsync(userId);
+            ICollection<Item> items = await _onebrbContext.GetItemsAsync(username);
 
-            if (items is null)
+            if (items == null)
             {
                 return null;
             }

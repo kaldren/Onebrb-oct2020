@@ -22,39 +22,34 @@ namespace Onebrb.Services.Tests.ItemServiceTests
         }
 
         [Fact]
-        public async void GetItemAsync_ItemIdNotFound_ShouldReturnNull()
+        public async void GetItemAsync_ItemNotFound_ShouldReturnNull()
         {
-            long itemId = DataGenerator.Create<long>();
-
-            _onebrbContext.Setup(x => x.GetItemAsync(It.IsAny<long>()))
-                .ReturnsAsync(() => null);
-
-            ItemServiceModel result = await _itemService.GetItemAsync(itemId);
+            ItemServiceModel result = await _itemService.GetItemAsync(It.IsAny<int>());
 
             Assert.Null(result);
         }
 
         [Fact]
-        public async void GetItemAsync_ItemIdFound_ShouldReturnItemServiceModel()
+        public async void GetItemAsync_ItemFound_ShouldReturnItem()
         {
-            long itemId = 100;
+            int itemId = DataGenerator.Create<int>();
 
-            var item = new Item { 
+            var fakeItem = new Item { 
                 Id = itemId
             };
 
-            var itemServiceModel = new ItemServiceModel
+            var fakeItemServiceModel = new ItemServiceModel
             {
                 Id = itemId,
             };
 
             _onebrbContext.Setup(x => x.GetItemAsync(itemId))
-                .ReturnsAsync(item);
+                .ReturnsAsync(fakeItem);
 
             ItemServiceModel result = await _itemService.GetItemAsync(itemId);
 
             Assert.NotNull(result);
-            Assert.Equal(result.Id, item.Id);
+            Assert.Equal(result.Id, fakeItem.Id);
         }
 
         [Fact]

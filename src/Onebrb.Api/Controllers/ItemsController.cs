@@ -20,10 +20,30 @@ namespace Onebrb.Api.Controllers
             _itemService = itemService;
         }
 
-        [HttpGet("{itemId}")]
-        public async Task<ActionResult<ItemServiceModel>> Get(int itemId)
+        [HttpGet("{itemId:int}")]
+        public async Task<IActionResult> GetItem(int itemId)
         {
-            return await _itemService.GetItemAsync(itemId);
+            ItemServiceModel item = await _itemService.GetItemAsync(itemId);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(item);
+        }
+
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetItems(string username)
+        {
+            ICollection<ItemServiceModel> items = await _itemService.GetItemsAsync(username);
+
+            if (items == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(items);
         }
     }
 }
