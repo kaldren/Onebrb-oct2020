@@ -37,12 +37,6 @@ namespace Onebrb.Data
             return await this.Items.Where(x => x.UserId == user.Id).ToListAsync();
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new ItemConfiguration());
-        }
-
         public async Task<bool> DeleteAsync(int itemId)
         {
             Item item = await this.Items.FirstOrDefaultAsync(x => x.Id == itemId);
@@ -56,6 +50,18 @@ namespace Onebrb.Data
             int result = await this.SaveChangesAsync();
 
             return result > 0;
+        }
+
+        public async Task<bool> EditAsync(Item item)
+        {
+            this.Update(item);
+            return await this.SaveChangesAsync() > 0;
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new ItemConfiguration());
         }
     }
 }

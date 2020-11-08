@@ -4,9 +4,7 @@ using System.Text;
 
 namespace Onebrb.Services.Models.Item
 {
-    public class DeleteItemModel
+    public class DeleteItemModel : BaseModel
     {
-        public int ItemId { get; set; }
-        public string UserId { get; set; }
     }
 }

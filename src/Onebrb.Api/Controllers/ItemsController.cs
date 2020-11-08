@@ -53,6 +53,38 @@ namespace Onebrb.Api.Controllers
             return Ok(items);
         }
 
+        [HttpPatch("{itemId:int}")]
+        [Authorize]
+        public async Task<IActionResult> EditItem(int itemId, [FromBody] EditItemModel model)
+        {
+            // Check who the current user requesting editing is
+            User currentUser = await this._userManager.GetUserAsync(this.User);
+
+            // Check if item exists
+            ItemServiceModel item = await this._itemService.GetItemAsync(itemId);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the item is hes/hers to edit
+            if (item.User.Id != currentUser.Id)
+            {
+                return Unauthorized();
+            }
+
+            // Edit
+            bool result = await this._itemService.Edit(model);
+
+            if (!result)
+            {
+                return StatusCode(500);
+            }
+
+            return Ok(item);
+        }
+
         [HttpDelete("{itemId:int}")]
         [Authorize]
         public async Task<IActionResult> Delete(int itemId)

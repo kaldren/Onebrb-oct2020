@@ -12,5 +12,6 @@ namespace Onebrb.Services.Services
         Task<ItemServiceModel> GetItemAsync(int itemId);
         Task<ICollection<ItemServiceModel>> GetItemsAsync(string username);
         Task<bool> Delete(DeleteItemModel model);
+        Task<bool> Edit(EditItemModel model);
     }
 }

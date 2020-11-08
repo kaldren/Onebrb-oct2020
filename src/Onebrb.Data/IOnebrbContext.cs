@@ -8,6 +8,7 @@ namespace Onebrb.Data
     {
         Task<Item> GetItemAsync(int itemId);
         Task<ICollection<Item>> GetItemsAsync(string username);
+        Task<bool> EditAsync(Item item);
         Task<bool> DeleteAsync(int itemId);
     }
 }

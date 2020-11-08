@@ -43,7 +43,19 @@ namespace Onebrb.Services.Services
 
             return ObjectMapper.Mapper.Map<ICollection<ItemServiceModel>>(items);
         }
+        public async Task<bool> Edit(EditItemModel model)
+        {
+            var item = await this._onebrbContext.GetItemAsync(model.ItemId);
 
+            if (item == null || item.UserId != model.UserId)
+            {
+                return false;
+            }
+
+            item = ObjectMapper.Mapper.Map<Item>(model);
+
+            return await this._onebrbContext.EditAsync(item);
+        }
         public async Task<bool> Delete(DeleteItemModel model)
         {
             if (model == null)
@@ -60,5 +72,6 @@ namespace Onebrb.Services.Services
 
             return await this._onebrbContext.DeleteAsync(model.ItemId);
         }
+
     }
 }
