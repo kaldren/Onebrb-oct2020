@@ -5,7 +5,7 @@ using Onebrb.Services.Mapping;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
-using Onebrb.Services.Models;
+using Onebrb.Services.Models.Item;
 
 namespace Onebrb.Services.Services
 {

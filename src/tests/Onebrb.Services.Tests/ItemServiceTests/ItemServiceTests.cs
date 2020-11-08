@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 using Onebrb.Core.Models;
 using Onebrb.Data;
@@ -13,13 +14,8 @@ namespace Onebrb.Services.Tests.ItemServiceTests
 {
     public class ItemServiceTests : BaseItemServiceTests
     {
-        private readonly IItemService _itemService;
-        private readonly Mock<IOnebrbContext> _onebrbContext;
-
         public ItemServiceTests()
         {
-            _onebrbContext = new Mock<IOnebrbContext>();
-            _itemService = new ItemService(_onebrbContext.Object);
         }
 
         [Fact]

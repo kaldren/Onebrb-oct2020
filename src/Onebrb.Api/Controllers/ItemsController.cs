@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Onebrb.Core.Models;
 using Onebrb.Services;
 using Onebrb.Services.Models;
+using Onebrb.Services.Models.Item;
 using Onebrb.Services.Services;
 
 namespace Onebrb.Api.Controllers
