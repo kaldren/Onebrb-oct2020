@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Onebrb.MVC.Models.Item;
+using Onebrb.Services;
 using Onebrb.Services.Services;
 
 namespace Onebrb.MVC.Controllers
@@ -11,10 +13,12 @@ namespace Onebrb.MVC.Controllers
     public class ItemsController : Controller
     {
         private readonly IItemService _itemService;
+        private readonly IMapper _mapper;
 
-        public ItemsController(IItemService itemService)
+        public ItemsController(IItemService itemService, IMapper mapper)
         {
             _itemService = itemService;
+            _mapper = mapper;
         }
 
         [Route("Items/{itemId?}")]
@@ -25,19 +29,14 @@ namespace Onebrb.MVC.Controllers
                 return View();
             }
 
-            var item = await _itemService.GetItemAsync(itemId.Value);
+            ItemServiceModel item = await _itemService.GetItemAsync(itemId.Value);
 
             if (item == null)
             {
                 return View();
             }
 
-            var itemViewModel = new ItemViewModel
-            {
-                Price = item.Price,
-                Title = item.Title,
-                Description = item.Description
-            };
+            var itemViewModel = this._mapper.Map<ItemViewModel>(item);
 
             return View(itemViewModel);
         }

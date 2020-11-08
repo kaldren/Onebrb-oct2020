@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Onebrb.Data;
 using Onebrb.Core.Models;
 using Onebrb.Services.Services;
+using AutoMapper;
 
 namespace Onebrb.MVC
 {
@@ -40,6 +41,8 @@ namespace Onebrb.MVC
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<IOnebrbContext, OnebrbContext>();
