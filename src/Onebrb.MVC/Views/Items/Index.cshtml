@@ -1,3 +1,16 @@
-﻿<h2>Items</h2>
+﻿@model Onebrb.MVC.Models.Item.ItemViewModel
+
+@if (Model == null)
+{
+    // All items
+    <h2>All items</h2>
+}
+else
+{
+    <h2>@Model?.Title</h2>
+    <h2>@Model?.Description</h2>
+    <h2>@Model?.Price</h2>
+}
+
 @{
 }

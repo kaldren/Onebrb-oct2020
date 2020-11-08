@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Onebrb.Data;
 using Onebrb.Core.Models;
+using Onebrb.Services.Services;
 
 namespace Onebrb.MVC
 {
@@ -39,6 +40,9 @@ namespace Onebrb.MVC
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<IOnebrbContext, OnebrbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

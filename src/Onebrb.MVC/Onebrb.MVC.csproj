@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Onebrb.Data\Onebrb.Data.csproj" />
+    <ProjectReference Include="..\Onebrb.Services\Onebrb.Services.csproj" />
   </ItemGroup>
 
 </Project>
