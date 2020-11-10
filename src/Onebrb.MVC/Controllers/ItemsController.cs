@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Onebrb.MVC.Models.Item;
 using Onebrb.Services;
+using Onebrb.Services.Items;
 using Onebrb.Services.Services;
 
 namespace Onebrb.MVC.Controllers
@@ -22,7 +23,7 @@ namespace Onebrb.MVC.Controllers
         }
 
         [Route("Items/{itemId?}")]
-        public async Task<IActionResult> Index(int? itemId)
+        public async Task<IActionResult> View(int? itemId)
         {
             if (!itemId.HasValue)
             {

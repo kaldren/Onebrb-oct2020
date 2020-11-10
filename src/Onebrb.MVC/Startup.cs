@@ -15,6 +15,7 @@ using Onebrb.Data;
 using Onebrb.Core.Models;
 using Onebrb.Services.Services;
 using AutoMapper;
+using Onebrb.Services.Items;
 
 namespace Onebrb.MVC
 {

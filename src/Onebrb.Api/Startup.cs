@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Onebrb.Core.Models;
 using Onebrb.Data;
+using Onebrb.Services.Items;
 using Onebrb.Services.Services;
 
 namespace Onebrb.Api
