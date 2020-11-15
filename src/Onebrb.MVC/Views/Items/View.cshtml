@@ -1,13 +1,11 @@
 ﻿@using Onebrb.MVC.Components.Items
 @model Onebrb.MVC.Models.Item.ItemViewModel
-@*<ViewItemsComponent Items="Model" />*@
-@*@(await Html.RenderComponentAsync<ViewItemComponent>(RenderMode.ServerPrerendered, new { Item = Model }))*@
 
 <component type="typeof(Onebrb.MVC.Components.Items.ViewItemsComponent)" param-Item="Model" render-mode="ServerPrerendered" />
 
-@section Scripts {
-    <script src="_framework/blazor.server.js"></script>
+@{
 }
 
-@{
+@section Scripts {
+    <script src="_framework/blazor.server.js"></script>
 }
