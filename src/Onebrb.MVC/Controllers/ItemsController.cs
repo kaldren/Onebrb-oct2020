@@ -22,7 +22,7 @@ namespace Onebrb.MVC.Controllers
             _mapper = mapper;
         }
 
-        [Route("Items/{itemId?}")]
+        [Route("Items/{itemId:int?}")]
         public async Task<IActionResult> View(int? itemId)
         {
             if (!itemId.HasValue)
@@ -40,6 +40,26 @@ namespace Onebrb.MVC.Controllers
             var itemViewModel = this._mapper.Map<ItemViewModel>(item);
 
             return View(itemViewModel);
+        }
+
+        [Route("Items/{username}")]
+        public async Task<IActionResult> ViewByUsername(string username)
+        {
+            if (username == null)
+            {
+                return View();
+            }
+
+            ICollection<ItemServiceModel> items = await _itemService.GetItemsAsync(username);
+
+            if (items == null)
+            {
+                return View();
+            }
+
+            var itemsViewModel = this._mapper.Map<ICollection<ItemViewModel>>(items);
+
+            return View(itemsViewModel);
         }
     }
 }

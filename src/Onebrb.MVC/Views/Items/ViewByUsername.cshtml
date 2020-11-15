@@ -1,0 +1,11 @@
+﻿@using Onebrb.MVC.Components.Items
+@model ICollection<Onebrb.MVC.Models.Item.ItemViewModel>
+
+<component type="typeof(Onebrb.MVC.Components.Items.ViewItemsByUsername)" param-Items="Model" render-mode="ServerPrerendered" />
+
+@{
+}
+
+@section Scripts {
+    <script src="_framework/blazor.server.js"></script>
+}

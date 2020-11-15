@@ -1,0 +1,12 @@
+﻿@using Onebrb.MVC.Models.Item
+
+@foreach (var item in Items)
+{
+    <p>@item.Title</p>
+}
+
+
+@code {
+    [Parameter]
+    public ICollection<ItemViewModel> Items { get; set; }
+}

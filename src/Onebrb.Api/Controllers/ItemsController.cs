@@ -41,6 +41,11 @@ namespace Onebrb.Api.Controllers
             return Ok(item);
         }
 
+        /// <summary>
+        /// Gets all of the items created by a given username
+        /// </summary>
+        /// <param name="username">The username of the author</param>
+        /// <returns></returns>
         [HttpGet("{username}")]
         public async Task<IActionResult> GetItems(string username)
         {
