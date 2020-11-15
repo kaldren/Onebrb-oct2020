@@ -1,0 +1,10 @@
+﻿@using Onebrb.MVC.Models.Item
+ 
+<h3>ViewItemComponent</h3>
+
+<p>@Item.Title</p>
+
+@code {
+    [Parameter]
+    public ItemViewModel Item { get; set; }
+}

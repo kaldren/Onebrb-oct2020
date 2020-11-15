@@ -1,15 +1,12 @@
-﻿@model Onebrb.MVC.Models.Item.ItemViewModel
+﻿@using Onebrb.MVC.Components.Items
+@model Onebrb.MVC.Models.Item.ItemViewModel
+@*<ViewItemsComponent Items="Model" />*@
+@*@(await Html.RenderComponentAsync<ViewItemComponent>(RenderMode.ServerPrerendered, new { Item = Model }))*@
 
-@if (Model == null)
-{
-    // All items
-    <h2>All items</h2>
-}
-else
-{
-    <h2>@Model?.Title</h2>
-    <h2>@Model?.Description</h2>
-    <h2>@Model?.Price</h2>
+<component type="typeof(Onebrb.MVC.Components.Items.ViewItemsComponent)" param-Item="Model" render-mode="ServerPrerendered" />
+
+@section Scripts {
+    <script src="_framework/blazor.server.js"></script>
 }
 
 @{

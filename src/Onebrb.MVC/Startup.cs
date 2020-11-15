@@ -43,6 +43,8 @@ namespace Onebrb.MVC
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            services.AddServerSideBlazor();
+
             services.AddAutoMapper(typeof(Startup));
 
             services.AddTransient<IItemService, ItemService>();
@@ -77,6 +79,7 @@ namespace Onebrb.MVC
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapBlazorHub();
             });
         }
     }
