@@ -1,6 +1,13 @@
 ﻿@using Onebrb.MVC.Models.Item
  
-<p>@Item.Title</p>
+
+    <div id="item-profile">
+        <p>@Item.Title</p>
+
+        <div class="item-comments">
+            Comments widget
+        </div>
+    </div>
 
 @code {
     [Parameter]
