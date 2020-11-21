@@ -1,9 +1,11 @@
-﻿@using Onebrb.MVC.Models.Item
+﻿@using Onebrb.MVC.Models.Item;
 
 @foreach (var item in Items)
 {
     <div>
         <p>@item.Title</p>
+        <p>Current viewer: @Viewer</p>
+        <button type="button" class="btn btn-danger">Delete</button>
     </div>
 }
 
@@ -11,4 +13,11 @@
 @code {
     [Parameter]
     public ICollection<ItemViewModel> Items { get; set; }
+
+    [Parameter]
+    public string Viewer { get; set; }
+
+    // Check if the user is the owner of the items
+
+    //string owner = Items.FirstOrDefault()
 }

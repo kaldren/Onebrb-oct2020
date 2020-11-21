@@ -1,7 +1,6 @@
-﻿@using Onebrb.MVC.Components.Items
-@model ICollection<Onebrb.MVC.Models.Item.ItemViewModel>
+﻿@model ICollection<Onebrb.MVC.Models.Item.ItemViewModel>
 
-<component type="typeof(Onebrb.MVC.Components.Items.ViewItemsByUsername)" param-Items="Model" render-mode="ServerPrerendered" />
+<component type="typeof(Onebrb.MVC.Components.Items.ViewItemsByUsername)" param-Items="Model" param-Viewer="@this.User?.Identity?.Name" render-mode="ServerPrerendered" />
 
 @{
 }

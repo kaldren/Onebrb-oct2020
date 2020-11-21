@@ -40,6 +40,8 @@ namespace Onebrb.MVC
                 .AddDefaultTokenProviders()
                 .AddDefaultUI();
 
+            services.AddHttpContextAccessor();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
