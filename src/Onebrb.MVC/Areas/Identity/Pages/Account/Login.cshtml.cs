@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Onebrb.Core.Models;
+using System.Security.Claims;
 
 namespace Onebrb.MVC.Areas.Identity.Pages.Account
 {
@@ -84,6 +85,13 @@ namespace Onebrb.MVC.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    // Add Id claim
+                    var user = await _userManager.FindByNameAsync(Input.UserName);
+
+                    var claimToAdd = new Claim("Id", user.Id);
+
+                    await _userManager.AddClaimAsync(user, claimToAdd);
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

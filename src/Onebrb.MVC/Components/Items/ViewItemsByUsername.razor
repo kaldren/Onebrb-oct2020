@@ -4,8 +4,13 @@
 {
     <div>
         <p>@item.Title</p>
-        <p>Current viewer: @Viewer</p>
-        <button type="button" class="btn btn-danger">Delete</button>
+
+        <p>ViewerId: @ViewerId</p>
+
+        @if (Items.Any(x => x.UserId == ViewerId))
+        {
+            <button type="button" class="btn btn-danger">Delete</button>
+        }
     </div>
 }
 
@@ -15,9 +20,9 @@
     public ICollection<ItemViewModel> Items { get; set; }
 
     [Parameter]
-    public string Viewer { get; set; }
+    public string ViewerId { get; set; }
+
+    bool isViewerOwner = false;
 
     // Check if the user is the owner of the items
-
-    //string owner = Items.FirstOrDefault()
 }
