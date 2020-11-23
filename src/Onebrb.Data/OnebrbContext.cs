@@ -20,6 +20,14 @@ namespace Onebrb.Data
 
         public DbSet<Item> Items { get; set; }
 
+        public async Task<Item> CreateItemAync(Item item)
+        {
+            this.Items.Add(item);
+            await this.SaveChangesAsync();
+
+            return item;
+        }
+
         public async Task<Item> GetItemAsync(int itemId)
         {
             return await this.Items.SingleOrDefaultAsync(x => x.Id == itemId);

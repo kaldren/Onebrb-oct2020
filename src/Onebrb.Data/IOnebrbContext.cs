@@ -6,6 +6,7 @@ namespace Onebrb.Data
 {
     public interface IOnebrbContext
     {
+        Task<Item> CreateItemAync(Item item);
         Task<Item> GetItemAsync(int itemId);
         Task<ICollection<Item>> GetItemsAsync(string username);
         Task<bool> EditAsync(Item item);

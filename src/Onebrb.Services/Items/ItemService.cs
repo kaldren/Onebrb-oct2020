@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Onebrb.Services.Models.Item;
 using Onebrb.Services.Items;
+using AutoMapper;
+using Onebrb.Data.Models;
 
 namespace Onebrb.Services.Services
 {
@@ -14,11 +16,28 @@ namespace Onebrb.Services.Services
     {
         private readonly IOnebrbContext _onebrbContext;
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public ItemService(IOnebrbContext onebrbContext, UserManager<User> userManager)
+        public ItemService(IOnebrbContext onebrbContext,
+            UserManager<User> userManager,
+            IMapper mapper
+            )
         {
             _onebrbContext = onebrbContext;
             _userManager = userManager;
+            _mapper = mapper;
+        }
+
+        public async Task<ItemServiceModel> CreateItemAsync(ItemServiceModel model)
+        {
+            // TODO: Create Data service layer
+            //var item = _mapper.Map<ItemDataModel>(model);
+
+            var item = _mapper.Map<Item>(model);
+
+            var savedItem = await _onebrbContext.CreateItemAync(item);
+
+            return _mapper.Map<ItemServiceModel>(savedItem);
         }
 
         public async Task<ItemServiceModel> GetItemAsync(int itemId)

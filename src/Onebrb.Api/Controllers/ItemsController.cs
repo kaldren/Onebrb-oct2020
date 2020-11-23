@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Onebrb.Core.Models;
+using Onebrb.Core.RequestModels;
 using Onebrb.Services;
 using Onebrb.Services.Items;
 using Onebrb.Services.Models;
@@ -21,11 +23,29 @@ namespace Onebrb.Api.Controllers
     {
         private readonly IItemService _itemService;
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public ItemsController(IItemService itemService, UserManager<User> userManager)
+        public ItemsController(IItemService itemService,
+            UserManager<User> userManager,
+            IMapper mapper)
         {
             _itemService = itemService;
             _userManager = userManager;
+            _mapper = mapper;
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> CreateItem(ItemRequestModel model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            var item = _mapper.Map<ItemServiceModel>(model);
+
+            _itemService.Create
         }
 
         [HttpGet("{itemId:int}")]
