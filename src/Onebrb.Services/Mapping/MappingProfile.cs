@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using Onebrb.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Onebrb.Core.Models;
+using Onebrb.Services.Services;
 
 namespace Onebrb.Services
 {
@@ -12,6 +9,7 @@ namespace Onebrb.Services
         public MappingProfile()
         {
             CreateMap<Item, ItemServiceModel>();
+            CreateMap<ItemServiceModel, Item>();
         }
     }
 }

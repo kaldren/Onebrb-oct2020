@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Onebrb.Api.Constants;
 using Onebrb.Core.Models;
 using Onebrb.Core.RequestModels;
 using Onebrb.Services;
 using Onebrb.Services.Items;
-using Onebrb.Services.Models;
 using Onebrb.Services.Models.Item;
 using Onebrb.Services.Services;
 
@@ -34,8 +31,9 @@ namespace Onebrb.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
-        [Authorize]
+        [HttpPost("create")]
+        //[Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateItem(ItemRequestModel model)
         {
             if (model == null)
@@ -45,7 +43,14 @@ namespace Onebrb.Api.Controllers
 
             var item = _mapper.Map<ItemServiceModel>(model);
 
-            _itemService.Create
+            item = await _itemService.Create(item);
+
+            if (item == null)
+            {
+                return BadRequest();
+            }
+
+            return Created($"{ApiEndpoints.Users}/{item.Id}", item);
         }
 
         [HttpGet("{itemId:int}")]

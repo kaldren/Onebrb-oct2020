@@ -2,6 +2,7 @@
 using Onebrb.Core.Models;
 using Onebrb.Core.RequestModels;
 using Onebrb.Core.ResponseModels;
+using Onebrb.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,12 @@ namespace Onebrb.Api.Mappings
     {
         public DefaultProfile()
         {
+            // User
             CreateMap<UserRequestModel, User>();
             CreateMap<UserRequestModel, UserResponseModel>();
+
+            // Item
+            CreateMap<ItemRequestModel, ItemServiceModel>();
         }
     }
 }

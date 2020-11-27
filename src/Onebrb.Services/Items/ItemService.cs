@@ -9,6 +9,7 @@ using Onebrb.Services.Models.Item;
 using Onebrb.Services.Items;
 using AutoMapper;
 using Onebrb.Data.Models;
+using System;
 
 namespace Onebrb.Services.Services
 {
@@ -93,5 +94,23 @@ namespace Onebrb.Services.Services
             return await this._onebrbContext.DeleteAsync(model.ItemId);
         }
 
+        public async Task<ItemServiceModel> Create(ItemServiceModel item)
+        {
+            if (item == null)
+            {
+                return null;
+            }
+
+            Item dbItem = ObjectMapper.Mapper.Map<Item>(item);
+
+            Item createdItem = await this._onebrbContext.CreateItemAync(dbItem);
+
+            if (createdItem.Id > 0)
+            {
+                return ObjectMapper.Mapper.Map<ItemServiceModel>(createdItem);
+            }
+
+            return null;
+        }
     }
 }
