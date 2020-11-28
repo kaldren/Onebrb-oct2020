@@ -30,7 +30,7 @@ namespace Onebrb.MVC.Controllers
         }
 
         [HttpGet]
-        [Route("items/create")]
+        [Route("{culture}/items/create")]
         public ViewResult Create()
         {
             return View();

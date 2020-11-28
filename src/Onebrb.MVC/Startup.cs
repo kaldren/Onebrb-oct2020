@@ -16,6 +16,12 @@ using Onebrb.Core.Models;
 using Onebrb.Services.Services;
 using AutoMapper;
 using Onebrb.Services.Items;
+using Onebrb.MVC.Constants;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Localization.Routing;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Onebrb.MVC
 {
@@ -33,7 +39,7 @@ namespace Onebrb.MVC
         {
             services.AddDbContext<OnebrbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString(AppConst.ConnectionString)));
 
             services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<OnebrbContext>()
@@ -44,6 +50,33 @@ namespace Onebrb.MVC
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            // Localization
+            services.AddLocalization(options => options.ResourcesPath = AppConst.ResourcesPath);
+            services.Configure<RequestLocalizationOptions>(
+                options =>
+                {
+                    var supportedCultures = new List<CultureInfo>
+                    {
+                        new CultureInfo("en"),
+                        new CultureInfo("bg")
+                    };
+
+                    options.DefaultRequestCulture = new RequestCulture(culture: "bg", uiCulture: "bg");
+                    options.SupportedCultures = supportedCultures;
+                    options.SupportedUICultures = supportedCultures;
+
+                    options.RequestCultureProviders.Clear();
+                    options.RequestCultureProviders.Insert(0, new RouteDataRequestCultureProvider());
+                    options.RequestCultureProviders.Insert(1, new QueryStringRequestCultureProvider());
+                    //options.RequestCultureProviders.Insert(1, requestProvider);
+                }
+            );
+
+            services
+                .AddMvc()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization();
 
             services.AddServerSideBlazor();
 
@@ -67,6 +100,10 @@ namespace Onebrb.MVC
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            var localizeOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(localizeOptions.Value);
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
