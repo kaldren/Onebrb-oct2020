@@ -19,6 +19,7 @@ namespace Onebrb.Data
         }
 
         public DbSet<Item> Items { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         public async Task<Item> CreateItemAync(Item item)
         {

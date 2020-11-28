@@ -22,7 +22,21 @@ namespace Onebrb.MVC.Controllers
             _mapper = mapper;
         }
 
-        [Route("Items/{itemId:int?}")]
+        [HttpPost]
+        [Route("items/create")]
+        public async Task<IActionResult> Create(object model)
+        {
+            return null;
+        }
+
+        [HttpGet]
+        [Route("items/create")]
+        public ViewResult Create()
+        {
+            return View();
+        }
+
+        [Route("items/{itemId:int?}")]
         public async Task<IActionResult> View(int? itemId)
         {
             if (!itemId.HasValue)
@@ -42,7 +56,7 @@ namespace Onebrb.MVC.Controllers
             return View(itemViewModel);
         }
 
-        [Route("Items/{username}")]
+        [Route("items/{username}")]
         public async Task<IActionResult> ViewByUsername(string username)
         {
             if (username == null)
