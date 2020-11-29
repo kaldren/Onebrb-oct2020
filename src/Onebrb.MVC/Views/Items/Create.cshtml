@@ -1,21 +1,21 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@model Onebrb.MVC.Models.Item.CreateItemViewModel 
 
 <p>Create item</p>
 
 <form>
     <div class="form-group">
-        <label for="exampleFormControlInput1">@Localizer["CreateItemTitle"]</label>
-        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+        <label for="inputTitle">@Localizer["CreateItemTitle"]</label>
+        <input type="text" class="form-control" id="inputTitle" placeholder="BMW 330 XD 2002">
     </div>
     <div class="form-group">
-        <label for="exampleFormControlSelect1">Example select</label>
-        <select class="form-control" id="exampleFormControlSelect1">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+        <label for="selectCategory">Example select</label>
+        <select class="form-control" id="selectCategory">
+            @foreach (var category in Model.Categories)
+            {
+                <option>@category.Name</option>
+            }
         </select>
     </div>
     <div class="form-group">

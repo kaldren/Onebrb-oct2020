@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Onebrb.MVC.Models.Item;
 using Onebrb.Services;
+using Onebrb.Services.Categories;
 using Onebrb.Services.Items;
 using Onebrb.Services.Services;
 
@@ -14,26 +15,38 @@ namespace Onebrb.MVC.Controllers
     public class ItemsController : Controller
     {
         private readonly IItemService _itemService;
+        private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
 
-        public ItemsController(IItemService itemService, IMapper mapper)
+        public ItemsController(
+            IItemService itemService,
+            ICategoryService categoryService,
+            IMapper mapper)
         {
             _itemService = itemService;
+            _categoryService = categoryService;
             _mapper = mapper;
         }
 
         [HttpPost]
         [Route("items/create")]
-        public async Task<IActionResult> Create(object model)
+        public IActionResult CreatePost()
         {
-            return null;
+            return View();
         }
 
         [HttpGet]
-        [Route("{culture}/items/create")]
-        public ViewResult Create()
+        [Route("items/create")]
+        public async Task<ViewResult> Create()
         {
-            return View();
+            var categories = await _categoryService.GetAllCategories();
+
+            var viewModel = new CreateItemViewModel
+            {
+                Categories = categories
+            };
+
+            return View(viewModel);
         }
 
         [Route("items/{itemId:int?}")]

@@ -67,6 +67,11 @@ namespace Onebrb.Data
             return await this.SaveChangesAsync() > 0;
         }
 
+        public async Task<ICollection<Category>> GetAllCategories()
+        {
+            return await Categories.ToListAsync();
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

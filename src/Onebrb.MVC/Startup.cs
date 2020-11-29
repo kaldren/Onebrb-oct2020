@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Onebrb.Services.Categories;
 
 namespace Onebrb.MVC
 {
@@ -69,7 +70,6 @@ namespace Onebrb.MVC
                     options.RequestCultureProviders.Clear();
                     options.RequestCultureProviders.Insert(0, new RouteDataRequestCultureProvider());
                     options.RequestCultureProviders.Insert(1, new QueryStringRequestCultureProvider());
-                    //options.RequestCultureProviders.Insert(1, requestProvider);
                 }
             );
 
@@ -82,8 +82,9 @@ namespace Onebrb.MVC
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddTransient<IItemService, ItemService>();
             services.AddTransient<IOnebrbContext, OnebrbContext>();
+            services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<ICategoryService, CategoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
