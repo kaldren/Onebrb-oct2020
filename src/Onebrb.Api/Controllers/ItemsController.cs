@@ -32,8 +32,7 @@ namespace Onebrb.Api.Controllers
         }
 
         [HttpPost("create")]
-        //[Authorize]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> CreateItem(ItemRequestModel model)
         {
             if (model == null)

@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Onebrb.Services.Categories;
+using System.Net.Http;
 
 namespace Onebrb.MVC
 {
@@ -85,6 +86,9 @@ namespace Onebrb.MVC
             services.AddTransient<IOnebrbContext, OnebrbContext>();
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<ICategoryService, CategoryService>();
+
+            services.AddHttpClient();
+            services.AddScoped<HttpClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

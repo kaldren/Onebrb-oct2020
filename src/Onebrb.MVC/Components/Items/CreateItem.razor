@@ -1,15 +1,24 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Onebrb.MVC.Models.Item
+@using System.Net.Http
+@using Onebrb.Core.RequestModels
+@using Newtonsoft.Json
+@using System.Text
+@inject HttpClient Http
 
-<p>@Local["CreateItemPublishItemHeaderText"].Value.ToString()</p>
+
+@*<p>@Local["CreateItemPublishItemHeaderText"].Value.ToString()</p>*@
+<p>Publish new item</p>
 <p class="@notifyBarClass">@onSubmitResult</p>
-<form>
+<EditForm Model="@Item" OnValidSubmit="HandleValidSubmit">
     <div class="form-group">
-        <label for="inputTitle">@Local["CreateItemTitle"].Value.ToString()</label>
-        <input type="text" class="form-control" id="inputTitle" placeholder="BMW 330 XD 2002">
+        @*<label for="inputTitle">@Local["CreateItemTitle"].Value.ToString()</label>*@
+        <label for="inputTitle">Title</label>
+        <input type="text" class="form-control" id="inputTitle" placeholder="BMW 330 XD 2002" @bind-value="Item.Title">
     </div>
     <div class="form-group">
-        <label for="selectCategory">@Local["CreateItemCategory"].Value.ToString()</label>
+        @*<label for="selectCategory">@Local["CreateItemCategory"].Value.ToString()</label>*@
+        <label for="selectCategory">Category</label>
         <select class="form-control" id="selectCategory">
             @foreach (var category in Model.Categories)
             {
@@ -18,11 +27,13 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="textareaDescription">@Local["CreateItemDescription"].Value.ToString()</label>
-        <textarea class="form-control" id="textareaDescription" rows="3"></textarea>
+        @*<label for="textareaDescription">@Local["CreateItemDescription"].Value.ToString()</label>*@
+        <label for="textareaDescription">Description</label>
+        <textarea class="form-control" id="textareaDescription" rows="3" @bind="Item.Description"></textarea>
     </div>
-    <button type="button" class="btn btn-success" @onclick="onFormSubmit" @onsubmit="onFormSubmit">@Local["CreateItemPublishButton"].Value.ToString()</button>
-</form>
+    <!--<button type="button" class="btn btn-success" @onclick="onFormSubmit" @onsubmit="onFormSubmit">-->@*@Local["CreateItemPublishButton"].Value.ToString()*@<!--</button>-->
+    <button type="button" class="btn btn-success">Publish</button>
+</EditForm>
 @{
 }
 
@@ -34,17 +45,34 @@
     [Parameter]
     public string ViewerId { get; set; }
 
-    [Parameter]
-    public IViewLocalizer Local { get; set; }
+    //[Parameter]
+    //public IViewLocalizer Local { get; set; }
+
+    CreateItemRequestModel Item = new CreateItemRequestModel
+    {
+        Description = "Test description",
+        Price = 15.50M,
+        Title = "Fake Title",
+    };
 
 
     public string onSubmitResult { get; set; }
     public string notifyBarClass { get; set; }
 
-    private void onFormSubmit()
+    private async void HandleValidSubmit()
     {
-        notifyBarClass = "alert-success";
-        onSubmitResult = "Item published successfuly!";
+        notifyBarClass = "alert-notify";
+        onSubmitResult = "Creating item...";
+
+        var api = "https://localhost:44307/api/items/create";
+        var json = JsonConvert.SerializeObject(Item);
+        var data = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await Http.PostAsync(api, data);
+
+        string result = response.Content.ReadAsStringAsync().Result;
+
+        onSubmitResult = result;
     }
 
     protected override void OnInitialized()
