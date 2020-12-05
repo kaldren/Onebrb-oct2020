@@ -7,6 +7,7 @@
 
 <p>Publish new item</p>
 <p class="@notifyBarClass">@onSubmitResult</p>
+<p class="@notifyBarClass">@selectedCategory</p>
 
 <EditForm Model="@Item" OnSubmit="HandleSubmit">
     <div class="form-group">
@@ -21,12 +22,12 @@
             Category
         </label>
 
-        @*<InputSelect @bind-Value="Model.Categories" id="itemCategories" class="form-control">
-                @foreach (var category in Model.Categories)
-                {
-                    <option>@category.Name</option>
-                }
-            </InputSelect>*@
+        <InputSelect @bind-Value="SelectedCategory" id="itemCategories" class="form-control">
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </InputSelect>
     </div>
 
     <div class="form-group">
@@ -58,19 +59,22 @@
     public string ViewerId { get; set; }
 
     CreateItemRequestModel Item = new CreateItemRequestModel();
-
+    public string SelectedCategory { get; set; }
 
     public string onSubmitResult { get; set; }
     public string notifyBarClass { get; set; }
+    public string selectedCategory { get; set; }
 
     private async Task HandleSubmit()
     {
         notifyBarClass = "alert-notify";
-        onSubmitResult = "Creating item...";
+        onSubmitResult = $"Selected option {SelectedCategory}";
 
 
         try
         {
+            // Add category
+            Item.CategoryId = int.Parse(SelectedCategory);
             var json = JsonConvert.SerializeObject(Item);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -78,17 +82,12 @@
 
             string result = response.Content.ReadAsStringAsync().Result;
 
-            onSubmitResult = result;
+            ////onSubmitResult = SelectedCategory;
         }
         catch (Exception)
         {
             onSubmitResult = "Couldn't publish the item, please try again later...";
         }
 
-    }
-
-    protected override void OnInitialized()
-    {
-        // Fix Local["xxx"].Value.ToString()
     }
 }

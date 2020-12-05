@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Onebrb.Core.Models;
 using Onebrb.MVC.Models.Item;
 using Onebrb.Services;
 using Onebrb.Services.Categories;
@@ -15,22 +18,35 @@ namespace Onebrb.MVC.Controllers
         private readonly IItemService _itemService;
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
         public ItemsController(
             IItemService itemService,
             ICategoryService categoryService,
-            IMapper mapper)
+            IMapper mapper,
+            UserManager<User> userManager)
         {
             _itemService = itemService;
             _categoryService = categoryService;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         [HttpPost]
         [Route("api/items/create")]
         public async Task<IActionResult> CreatePost(CreateItemRequestModel model)
         {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                var user = HttpContext.User;
+            }
+
             ItemServiceModel item = _mapper.Map<ItemServiceModel>(model);
+
+            // Get logged in user
+            var theuser = HttpContext;
+            item.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string username = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var response = await _itemService.Create(item);
 
