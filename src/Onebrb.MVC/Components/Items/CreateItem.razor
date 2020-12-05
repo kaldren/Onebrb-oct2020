@@ -1,38 +1,50 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
-@using Onebrb.MVC.Models.Item
+﻿@using Onebrb.MVC.Models.Item
 @using System.Net.Http
-@using Onebrb.Core.RequestModels
 @using Newtonsoft.Json
 @using System.Text
+@inject NavigationManager navigationManager;
 @inject HttpClient Http
 
-
-@*<p>@Local["CreateItemPublishItemHeaderText"].Value.ToString()</p>*@
 <p>Publish new item</p>
 <p class="@notifyBarClass">@onSubmitResult</p>
-<EditForm Model="@Item" OnValidSubmit="HandleValidSubmit">
+
+<EditForm Model="@Item" OnSubmit="HandleSubmit">
     <div class="form-group">
-        @*<label for="inputTitle">@Local["CreateItemTitle"].Value.ToString()</label>*@
-        <label for="inputTitle">Title</label>
-        <input type="text" class="form-control" id="inputTitle" placeholder="BMW 330 XD 2002" @bind-value="Item.Title">
+        <label for="itemTitle">
+            Title
+        </label>
+        <InputText @bind-Value="Item.Title" id="itemTitle" class="form-control" />
     </div>
+
     <div class="form-group">
-        @*<label for="selectCategory">@Local["CreateItemCategory"].Value.ToString()</label>*@
-        <label for="selectCategory">Category</label>
-        <select class="form-control" id="selectCategory">
-            @foreach (var category in Model.Categories)
-            {
-                <option>@category.Name</option>
-            }
-        </select>
+        <label for="itemCategories">
+            Category
+        </label>
+
+        @*<InputSelect @bind-Value="Model.Categories" id="itemCategories" class="form-control">
+                @foreach (var category in Model.Categories)
+                {
+                    <option>@category.Name</option>
+                }
+            </InputSelect>*@
     </div>
+
     <div class="form-group">
-        @*<label for="textareaDescription">@Local["CreateItemDescription"].Value.ToString()</label>*@
-        <label for="textareaDescription">Description</label>
-        <textarea class="form-control" id="textareaDescription" rows="3" @bind="Item.Description"></textarea>
+        <label for="itemDescription">
+            Description:
+        </label>
+        <InputTextArea @bind-Value="Item.Description" id="itemDescription" class="form-control" />
     </div>
-    <!--<button type="button" class="btn btn-success" @onclick="onFormSubmit" @onsubmit="onFormSubmit">-->@*@Local["CreateItemPublishButton"].Value.ToString()*@<!--</button>-->
-    <button type="button" class="btn btn-success">Publish</button>
+
+
+    <div class="form-group">
+        <label for="itemPrice">
+            Price
+        </label>
+        <InputNumber @bind-Value="Item.Price" id="itemPrice" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Publish</button>
 </EditForm>
 @{
 }
@@ -45,34 +57,34 @@
     [Parameter]
     public string ViewerId { get; set; }
 
-    //[Parameter]
-    //public IViewLocalizer Local { get; set; }
-
-    CreateItemRequestModel Item = new CreateItemRequestModel
-    {
-        Description = "Test description",
-        Price = 15.50M,
-        Title = "Fake Title",
-    };
+    CreateItemRequestModel Item = new CreateItemRequestModel();
 
 
     public string onSubmitResult { get; set; }
     public string notifyBarClass { get; set; }
 
-    private async void HandleValidSubmit()
+    private async Task HandleSubmit()
     {
         notifyBarClass = "alert-notify";
         onSubmitResult = "Creating item...";
 
-        var api = "https://localhost:44307/api/items/create";
-        var json = JsonConvert.SerializeObject(Item);
-        var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await Http.PostAsync(api, data);
+        try
+        {
+            var json = JsonConvert.SerializeObject(Item);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-        string result = response.Content.ReadAsStringAsync().Result;
+            var response = await Http.PostAsync($"{navigationManager.BaseUri}api/Items/Create", data);
 
-        onSubmitResult = result;
+            string result = response.Content.ReadAsStringAsync().Result;
+
+            onSubmitResult = result;
+        }
+        catch (Exception)
+        {
+            onSubmitResult = "Couldn't publish the item, please try again later...";
+        }
+
     }
 
     protected override void OnInitialized()

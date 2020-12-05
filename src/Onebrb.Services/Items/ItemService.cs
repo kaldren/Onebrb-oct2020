@@ -98,7 +98,7 @@ namespace Onebrb.Services.Services
         {
             if (item == null)
             {
-                return null;
+                throw new ArgumentNullException(nameof(item));
             }
 
             Item dbItem = ObjectMapper.Mapper.Map<Item>(item);

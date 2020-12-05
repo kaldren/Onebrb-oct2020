@@ -13,6 +13,7 @@ namespace Onebrb.MVC.Mappings
         public DefaultProfile()
         {
             CreateMap<ItemServiceModel, ItemViewModel>();
+            CreateMap<CreateItemRequestModel, ItemServiceModel>();
         }
     }
 }

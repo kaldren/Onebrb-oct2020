@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +6,10 @@ using Onebrb.MVC.Models.Item;
 using Onebrb.Services;
 using Onebrb.Services.Categories;
 using Onebrb.Services.Items;
-using Onebrb.Services.Services;
 
 namespace Onebrb.MVC.Controllers
 {
+    [ApiController]
     public class ItemsController : Controller
     {
         private readonly IItemService _itemService;
@@ -29,10 +27,14 @@ namespace Onebrb.MVC.Controllers
         }
 
         [HttpPost]
-        [Route("items/create")]
-        public IActionResult CreatePost()
+        [Route("api/items/create")]
+        public async Task<IActionResult> CreatePost(CreateItemRequestModel model)
         {
-            return View();
+            ItemServiceModel item = _mapper.Map<ItemServiceModel>(model);
+
+            var response = await _itemService.Create(item);
+
+            return Ok(response);
         }
 
         [HttpGet]
