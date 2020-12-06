@@ -10,6 +10,7 @@ using Onebrb.Services.Items;
 using AutoMapper;
 using Onebrb.Data.Models;
 using System;
+using System.Security.Claims;
 
 namespace Onebrb.Services.Services
 {

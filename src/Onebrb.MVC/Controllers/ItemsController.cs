@@ -2,8 +2,11 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
 using Onebrb.Core.Models;
 using Onebrb.MVC.Models.Item;
 using Onebrb.Services;
@@ -18,18 +21,18 @@ namespace Onebrb.MVC.Controllers
         private readonly IItemService _itemService;
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
-        private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _configuration;
 
         public ItemsController(
             IItemService itemService,
             ICategoryService categoryService,
             IMapper mapper,
-            UserManager<User> userManager)
+            IConfiguration configuration)
         {
             _itemService = itemService;
             _categoryService = categoryService;
             _mapper = mapper;
-            _userManager = userManager;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -44,9 +47,33 @@ namespace Onebrb.MVC.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("items/create")]
         public async Task<ViewResult> Create()
         {
+            // Get from API
+
+            IConfidentialClientApplication app;
+
+            app = ConfidentialClientApplicationBuilder.Create(_configuration["Api:ClientId"])
+                .WithClientSecret(_configuration["Api:ClientSecret"])
+                .WithAuthority(new System.Uri(_configuration["Api:Authority"]))
+                .Build();
+
+            string[] resourceIds = new string[] { _configuration["Api:ResourceId"] };
+
+            AuthenticationResult result = null;
+
+            try
+            {
+                result = await app.AcquireTokenForClient(resourceIds).ExecuteAsync();
+            }
+            catch (System.Exception ex)
+            {
+
+                throw;
+            }
+
             var categories = await _categoryService.GetAllCategories();
 
             var viewModel = new CreateItemViewModel

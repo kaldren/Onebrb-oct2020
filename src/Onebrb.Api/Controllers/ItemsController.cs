@@ -14,8 +14,8 @@ using Onebrb.Services.Services;
 
 namespace Onebrb.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ItemsController : ControllerBase
     {
         private readonly IItemService _itemService;
@@ -32,7 +32,8 @@ namespace Onebrb.Api.Controllers
         }
 
         [HttpPost("create")]
-        [Authorize]
+        [Route("api/[controller]/create")]
+        //[Authorize]
         public async Task<IActionResult> CreateItem(ItemRequestModel model)
         {
             if (model == null)

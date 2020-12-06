@@ -17,6 +17,7 @@ using Onebrb.Core.Models;
 using Onebrb.Data;
 using Onebrb.Services.Items;
 using Onebrb.Services.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Onebrb.Api
 {
@@ -61,6 +62,14 @@ namespace Onebrb.Api
 
             services.AddAutoMapper(typeof(Startup));
 
+            // Authentication
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Audience = Configuration["AAD:ResourceId"];
+                    options.Authority = $"{Configuration["AAD:InstanceId"]}{Configuration["AAD:TenantId"]}";
+                });
+
 
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<IOnebrbContext, OnebrbContext>();
@@ -80,6 +89,7 @@ namespace Onebrb.Api
 
             app.UseCors(MyAllowSpecificOrigins);
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
