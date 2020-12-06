@@ -27,6 +27,7 @@ namespace Onebrb.MVC.Controllers
 
         public IActionResult Privacy()
         {
+            var user = this.User;
             return View();
         }
 

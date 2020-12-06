@@ -2,7 +2,12 @@
 @model Onebrb.MVC.Models.Item.CreateItemViewModel
 @inject IViewLocalizer Localizer
 
-<component type="typeof(Onebrb.MVC.Components.Items.CreateItem)" param-Model="Model" render-mode="ServerPrerendered" />
+@if (User.Identity.IsAuthenticated)
+{
+    string currentUserId = this.User.Claims.FirstOrDefault(x => x.Type == "Id").Value;
+    <component type="typeof(Onebrb.MVC.Components.Items.CreateItem)" param-Model="Model" param-CurrentUserId="currentUserId" render-mode="ServerPrerendered" />
+}
+
 
 @{
 }
