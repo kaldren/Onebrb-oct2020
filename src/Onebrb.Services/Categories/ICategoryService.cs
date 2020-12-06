@@ -6,6 +6,6 @@ namespace Onebrb.Services.Categories
 {
     public interface ICategoryService
     {
-        Task<ICollection<Category>> GetAllCategories();
+        Task<ICollection<Category>> GetAllCategoriesAsync();
     }
 }

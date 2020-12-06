@@ -18,6 +18,7 @@ using Onebrb.Data;
 using Onebrb.Services.Items;
 using Onebrb.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Onebrb.Services.Categories;
 
 namespace Onebrb.Api
 {
@@ -72,6 +73,7 @@ namespace Onebrb.Api
 
 
             services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IOnebrbContext, OnebrbContext>();
         }
 

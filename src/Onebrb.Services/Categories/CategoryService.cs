@@ -16,7 +16,7 @@ namespace Onebrb.Services.Categories
             _dbContext = dbContext;
         }
 
-        public Task<ICollection<Category>> GetAllCategories()
+        public Task<ICollection<Category>> GetAllCategoriesAsync()
         {
             return _dbContext.GetAllCategories();
         }

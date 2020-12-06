@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -53,28 +54,13 @@ namespace Onebrb.MVC.Controllers
         {
             // Get from API
 
-            IConfidentialClientApplication app;
-
-            app = ConfidentialClientApplicationBuilder.Create(_configuration["Api:ClientId"])
-                .WithClientSecret(_configuration["Api:ClientSecret"])
-                .WithAuthority(new System.Uri(_configuration["Api:Authority"]))
-                .Build();
-
-            string[] resourceIds = new string[] { _configuration["Api:ResourceId"] };
-
-            AuthenticationResult result = null;
-
-            try
+            using (var httpClient = new HttpClient())
             {
-                result = await app.AcquireTokenForClient(resourceIds).ExecuteAsync();
+                using (var response = await httpClient.GetAsync($"{_configuration["Api:BaseAddress"]}/api/categories"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                }
             }
-            catch (System.Exception ex)
-            {
-
-                throw;
-            }
-
-            var categories = await _categoryService.GetAllCategories();
 
             var viewModel = new CreateItemViewModel
             {

@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Onebrb.Core.Models;
 using System.Security.Claims;
+using Microsoft.Identity.Client;
+using Microsoft.Extensions.Configuration;
 
 namespace Onebrb.MVC.Areas.Identity.Pages.Account
 {
@@ -20,14 +22,17 @@ namespace Onebrb.MVC.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _configuration;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<User> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IConfiguration configuration)
         {
             _userManager = userManager;
+            _configuration = configuration;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -91,6 +96,28 @@ namespace Onebrb.MVC.Areas.Identity.Pages.Account
                     var claimToAdd = new Claim("Id", user.Id);
 
                     await _userManager.AddClaimAsync(user, claimToAdd);
+
+                    // Getting bearer token from Azure AD once we're successfully logged in
+                    IConfidentialClientApplication app;
+
+                    app = ConfidentialClientApplicationBuilder.Create(_configuration["Api:ClientId"])
+                        .WithClientSecret(_configuration["Api:ClientSecret"])
+                        .WithAuthority(new System.Uri(_configuration["Api:Authority"]))
+                        .Build();
+
+                    string[] resourceIds = new string[] { _configuration["Api:ResourceId"] };
+
+                    AuthenticationResult authResult = null;
+
+                    try
+                    {
+                        authResult = await app.AcquireTokenForClient(resourceIds).ExecuteAsync();
+                        Response.Cookies.Append("OnebrbApiToken", authResult.AccessToken);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        throw new Exception(ex.Message);
+                    }
 
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
