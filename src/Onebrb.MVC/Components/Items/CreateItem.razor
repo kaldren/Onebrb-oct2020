@@ -5,7 +5,7 @@
 @inject NavigationManager navigationManager;
 @inject HttpClient Http
 
-<p>Publish new item (@CurrentUserId)</p>
+<p>Publish new item</p>
 <p class="@notifyBarClass">@onSubmitResult</p>
 <p class="@notifyBarClass">@selectedCategory</p>
 
@@ -56,9 +56,6 @@
     public CreateItemViewModel Model { get; set; }
 
     [Parameter]
-    public string ViewerId { get; set; }
-
-    [Parameter]
     public string CurrentUserId { get; set; }
 
     CreateItemRequestModel Item = new CreateItemRequestModel();
@@ -78,6 +75,7 @@
         {
             // Add category
             Item.CategoryId = int.Parse(SelectedCategory);
+            Item.UserId = CurrentUserId;
             var json = JsonConvert.SerializeObject(Item);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 

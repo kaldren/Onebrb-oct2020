@@ -36,17 +36,7 @@ namespace Onebrb.MVC.Controllers
         [Route("api/items/create")]
         public async Task<IActionResult> CreatePost(CreateItemRequestModel model)
         {
-            if (HttpContext.User.Identity.IsAuthenticated)
-            {
-                var user = HttpContext.User;
-            }
-
             ItemServiceModel item = _mapper.Map<ItemServiceModel>(model);
-
-            // Get logged in user
-            var theuser = HttpContext;
-            item.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            string username = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var response = await _itemService.Create(item);
 
