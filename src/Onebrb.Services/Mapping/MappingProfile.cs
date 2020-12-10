@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Onebrb.Core.Models;
+using Onebrb.Services.Models.Category;
 using Onebrb.Services.Services;
 
 namespace Onebrb.Services
@@ -8,8 +9,13 @@ namespace Onebrb.Services
     {
         public MappingProfile()
         {
+            // Item
             CreateMap<Item, ItemServiceModel>();
             CreateMap<ItemServiceModel, Item>();
+
+            // Category
+            CreateMap<Category, CategoryServiceModel>();
+            CreateMap<CategoryServiceModel, Category>();
         }
     }
 }

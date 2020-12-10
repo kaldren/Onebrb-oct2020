@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Onebrb.Api.Helpers;
 using Onebrb.Core.Models;
 using Onebrb.Services.Categories;
+using Onebrb.Services.Models.Category;
 
 namespace Onebrb.Api.Controllers
 {
@@ -30,7 +31,7 @@ namespace Onebrb.Api.Controllers
                 return BadRequest();
             }
 
-            return Ok(new BaseApiResponse<IEnumerable<Category>>
+            return Ok(new BaseApiResponse<IEnumerable<CategoryServiceModel>>
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "List of categories",

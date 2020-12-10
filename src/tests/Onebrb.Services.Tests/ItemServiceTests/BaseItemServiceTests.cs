@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 using Onebrb.Core.Models;
 using Onebrb.Data;
@@ -15,12 +16,13 @@ namespace Onebrb.Services.Tests.ItemServiceTests
         protected readonly IItemService _itemService;
         protected readonly Mock<IOnebrbContext> _onebrbContext;
         protected readonly Mock<UserManager<User>> _userManager;
+        private readonly IMapper _mapper;
 
         public BaseItemServiceTests()
         {
             _onebrbContext = new Mock<IOnebrbContext>();
             _userManager = new Mock<UserManager<User>>();
-            _itemService = new ItemService(_onebrbContext.Object, _userManager.Object);
+            _itemService = new ItemService(_onebrbContext.Object, _userManager.Object, _mapper);
         }
     }
 }

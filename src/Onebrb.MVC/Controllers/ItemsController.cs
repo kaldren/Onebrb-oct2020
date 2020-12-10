@@ -64,7 +64,7 @@ namespace Onebrb.MVC.Controllers
 
             var viewModel = new CreateItemViewModel
             {
-                Categories = categories
+                Categories = null//categories
             };
 
             return View(viewModel);

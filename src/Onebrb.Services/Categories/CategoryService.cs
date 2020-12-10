@@ -1,5 +1,8 @@
-﻿using Onebrb.Core.Models;
+﻿using AutoMapper;
+using Onebrb.Core.Models;
 using Onebrb.Data;
+using Onebrb.Services.Mapping;
+using Onebrb.Services.Models.Category;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,9 +19,13 @@ namespace Onebrb.Services.Categories
             _dbContext = dbContext;
         }
 
-        public Task<ICollection<Category>> GetAllCategoriesAsync()
+        public async Task<ICollection<CategoryServiceModel>> GetAllCategoriesAsync()
         {
-            return _dbContext.GetAllCategories();
+            var categoriesDb = await _dbContext.GetAllCategories();
+
+            var categoriesReturned = ObjectMapper.Mapper.Map<ICollection<CategoryServiceModel>>(categoriesDb);
+
+            return categoriesReturned;
         }
     }
 }
