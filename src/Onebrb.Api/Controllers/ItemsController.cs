@@ -33,6 +33,11 @@ namespace Onebrb.Api.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Gets item by item id
+        /// </summary>
+        /// <param name="itemId">The item id</param>
+        /// <returns>The item</returns>
         [HttpGet("{itemId:int}")]
         public async Task<IActionResult> GetItem(int itemId)
         {
@@ -51,6 +56,11 @@ namespace Onebrb.Api.Controllers
             });
         }
 
+        /// <summary>
+        /// Create item
+        /// </summary>
+        /// <param name="model">The request model</param>
+        /// <returns>The created item</returns>
         [Authorize]
         [HttpPost("create")]
         [Route("api/[controller]/create")]
@@ -77,7 +87,7 @@ namespace Onebrb.Api.Controllers
         /// Gets all of the items created by a given username
         /// </summary>
         /// <param name="username">The username of the author</param>
-        /// <returns></returns>
+        /// <returns>All items by given username</returns>
         [HttpGet("{username}")]
         public async Task<IActionResult> GetItems(string username)
         {
@@ -96,6 +106,12 @@ namespace Onebrb.Api.Controllers
             });
         }
 
+        /// <summary>
+        /// Updates item
+        /// </summary>
+        /// <param name="itemId">The item id</param>
+        /// <param name="model">The item model</param>
+        /// <returns>The updated item</returns>
         [HttpPatch("{itemId:int}")]
         [Authorize]
         public async Task<IActionResult> EditItem(int itemId, [FromBody] EditItemModel model)
@@ -135,6 +151,11 @@ namespace Onebrb.Api.Controllers
             });
         }
 
+        /// <summary>
+        /// Delete item by id
+        /// </summary>
+        /// <param name="itemId">The item id</param>
+        /// <returns>The deleted item</returns>
         [HttpDelete("{itemId:int}")]
         [Authorize]
         public async Task<IActionResult> Delete(int itemId)
