@@ -1,32 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Onebrb.Data;
+﻿using Onebrb.Data;
 using Onebrb.Core.Models;
 using Onebrb.Services.Mapping;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 using Onebrb.Services.Models.Item;
 using Onebrb.Services.Items;
 using AutoMapper;
-using Onebrb.Data.Models;
 using System;
-using System.Security.Claims;
 
 namespace Onebrb.Services.Services
 {
     public class ItemService : IItemService
     {
         private readonly IOnebrbContext _onebrbContext;
-        private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
         public ItemService(IOnebrbContext onebrbContext,
-            UserManager<User> userManager,
             IMapper mapper
             )
         {
             _onebrbContext = onebrbContext;
-            _userManager = userManager;
             _mapper = mapper;
         }
 

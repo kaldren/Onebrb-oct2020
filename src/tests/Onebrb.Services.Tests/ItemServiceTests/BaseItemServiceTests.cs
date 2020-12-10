@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AutoFixture;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using Onebrb.Core.Models;
@@ -7,6 +8,7 @@ using Onebrb.Services.Items;
 using Onebrb.Services.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Onebrb.Services.Tests.ItemServiceTests
@@ -15,14 +17,17 @@ namespace Onebrb.Services.Tests.ItemServiceTests
     {
         protected readonly IItemService _itemService;
         protected readonly Mock<IOnebrbContext> _onebrbContext;
-        protected readonly Mock<UserManager<User>> _userManager;
         private readonly IMapper _mapper;
 
         public BaseItemServiceTests()
         {
+            //This code is needed to support recursion
+            DataGenerator.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+            .ForEach(b => DataGenerator.Behaviors.Remove(b));
+            DataGenerator.Behaviors.Add(new OmitOnRecursionBehavior(1));
+
             _onebrbContext = new Mock<IOnebrbContext>();
-            _userManager = new Mock<UserManager<User>>();
-            _itemService = new ItemService(_onebrbContext.Object, _userManager.Object, _mapper);
+            _itemService = new ItemService(_onebrbContext.Object, _mapper);
         }
     }
 }
