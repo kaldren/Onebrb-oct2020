@@ -24,7 +24,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Onebrb.Services.Categories;
 using System.Net.Http;
-using Blazored.LocalStorage;
 
 namespace Onebrb.MVC
 {
@@ -75,8 +74,6 @@ namespace Onebrb.MVC
                     //options.RequestCultureProviders.Insert(2, new QueryStringRequestCultureProvider());
                 }
             );
-
-            services.AddBlazoredLocalStorage();
 
             services
                 .AddMvc()

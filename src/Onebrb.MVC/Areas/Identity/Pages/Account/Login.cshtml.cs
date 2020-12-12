@@ -15,6 +15,7 @@ using Onebrb.Core.Models;
 using System.Security.Claims;
 using Microsoft.Identity.Client;
 using Microsoft.Extensions.Configuration;
+using Onebrb.MVC.Config;
 
 namespace Onebrb.MVC.Areas.Identity.Pages.Account
 {
@@ -98,14 +99,17 @@ namespace Onebrb.MVC.Areas.Identity.Pages.Account
                     await _userManager.AddClaimAsync(user, claimToAdd);
 
                     // Getting bearer token from Azure AD once we're successfully logged in
+                    var tokenOptions = new ApiOptions();
+                    _configuration.GetSection(ApiOptions.Token).Bind(tokenOptions);
+
                     IConfidentialClientApplication app;
 
-                    app = ConfidentialClientApplicationBuilder.Create(_configuration["Api:ClientId"])
-                        .WithClientSecret(_configuration["Api:ClientSecret"])
-                        .WithAuthority(new System.Uri(_configuration["Api:Authority"]))
+                    app = ConfidentialClientApplicationBuilder.Create(tokenOptions.ClientId)
+                        .WithClientSecret(tokenOptions.ClientSecret)
+                        .WithAuthority(new Uri(tokenOptions.Authority))
                         .Build();
 
-                    string[] resourceIds = new string[] { _configuration["Api:ResourceId"] };
+                    string[] resourceIds = new string[] { tokenOptions.ResourceId };
 
                     AuthenticationResult authResult = null;
 
@@ -114,9 +118,9 @@ namespace Onebrb.MVC.Areas.Identity.Pages.Account
                         authResult = await app.AcquireTokenForClient(resourceIds).ExecuteAsync();
                         Response.Cookies.Append("OnebrbApiToken", authResult.AccessToken);
                     }
-                    catch (System.Exception ex)
+                    catch (Exception ex)
                     {
-                        throw new Exception(ex.Message);
+                        throw new Exception($"Failed to fetch bearer token. {ex.Message}");
                     }
 
                     _logger.LogInformation("User logged in.");

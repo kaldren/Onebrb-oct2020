@@ -4,10 +4,10 @@
 @using System.Text
 @using System.Security.Claims
 @using System.Net.Http.Headers
-@using Onebrb.MVC.Constants 
+@using Onebrb.MVC.Constants
 @inject NavigationManager navigationManager
 @inject HttpClient Http
-@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 <p>Publish new item</p>
 <p class="@notifyBarClass">@OnSubmitResult</p>
@@ -92,18 +92,31 @@
         PublishBtnText = "Publishing...";
         BtnSubmitCss = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess} {BootstrapCssConst.Disabled}";
 
+        string scheme = HttpContextAccessor.HttpContext.Request.Scheme;
+        string host = HttpContextAccessor.HttpContext.Request.Host.Value;
+        string pathBase = HttpContextAccessor.HttpContext.Request.PathBase;
+
+        string createItemEndpoint = $"{scheme}://{host}{pathBase}/api/Items/Create";
+
         try
         {
+            if (string.IsNullOrWhiteSpace(SelectedCategoryId))
+            {
+                SelectedCategoryId = @Model.Categories.First().Id.ToString();
+            }
+
             Item.CategoryId = int.Parse(SelectedCategoryId);
             Item.UserId = CurrentUserId;
 
             var json = JsonConvert.SerializeObject(Item);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var apiToken = HttpContextAccessor.HttpContext.Request.Cookies["OnebrbApiToken"];
+            OnSubmitResult = apiToken;
 
             Http.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", OnebrbApiToken);
+                new AuthenticationHeaderValue("Bearer", apiToken);
 
-            var response = await Http.PostAsync($"https://localhost:44307/api/Items/Create", data);
+            var response = await Http.PostAsync($"{createItemEndpoint}", data);
 
             string result = response.Content.ReadAsStringAsync().Result;
             IsFormEnabled = false;
@@ -121,29 +134,5 @@
             BtnSubmitCss = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess}";
         }
 
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        SelectedCategoryId = Model.Categories.First().Id.ToString();
-        OnebrbApiToken = await localStorage.GetItemAsync<string>("OnebrbApiToken");
-
-        if (string.IsNullOrWhiteSpace(OnebrbApiToken))
-        {
-            try
-            {
-                var response = await Http.GetAsync($"https://localhost:44308/api/token");
-
-                string result = response.Content.ReadAsStringAsync().Result;
-                OnSubmitResult = result;
-                await localStorage.SetItemAsync("OnebrbApiToken", result);
-
-                OnebrbApiToken = await localStorage.GetItemAsync<string>("OnebrbApiToken");
-            }
-            catch (Exception)
-            {
-                OnSubmitResult = "Couldn't publish the item, please try again later...";
-            }
-        }
     }
 }
