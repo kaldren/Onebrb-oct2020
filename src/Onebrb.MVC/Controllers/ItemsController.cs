@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client;
 using Newtonsoft.Json;
-using Onebrb.Core.Models;
+using Onebrb.MVC.Config;
 using Onebrb.MVC.Models.Item;
 using Onebrb.Services;
 using Onebrb.Services.Categories;
@@ -24,18 +21,15 @@ namespace Onebrb.MVC.Controllers
     public class ItemsController : Controller
     {
         private readonly IItemService _itemService;
-        private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
         public ItemsController(
             IItemService itemService,
-            ICategoryService categoryService,
             IMapper mapper,
             IConfiguration configuration)
         {
             _itemService = itemService;
-            _categoryService = categoryService;
             _mapper = mapper;
             _configuration = configuration;
         }
@@ -57,12 +51,14 @@ namespace Onebrb.MVC.Controllers
         public async Task<ViewResult> Create()
         {
             // Get from API
+            var apiOptions = new ApiOptions();
+            _configuration.GetSection(ApiOptions.Token).Bind(apiOptions);
 
             BaseApiResponse<ICollection<CategoryServiceModel>> categories;
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync($"{_configuration["Api:BaseAddress"]}/api/categories"))
+                using (var response = await httpClient.GetAsync($"{apiOptions.BaseAddress}/api/categories"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     categories = JsonConvert.DeserializeObject<BaseApiResponse<ICollection<CategoryServiceModel>>>(apiResponse);

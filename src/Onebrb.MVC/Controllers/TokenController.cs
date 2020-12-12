@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Client;
@@ -23,8 +22,8 @@ namespace Onebrb.MVC.Controllers
         [HttpGet]
         public async Task<string> GetBearerToken()
         {
-            var tokenOptions = new TokenOptions();
-            _configuration.GetSection(TokenOptions.Token).Bind(tokenOptions);
+            var tokenOptions = new ApiOptions();
+            _configuration.GetSection(ApiOptions.Token).Bind(tokenOptions);
 
             IConfidentialClientApplication app;
 
@@ -42,7 +41,7 @@ namespace Onebrb.MVC.Controllers
                 result = await app.AcquireTokenForClient(resourceIds).ExecuteAsync();
                 return result.AccessToken;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw new Exception("Failed to fetch bearer token.");
             }

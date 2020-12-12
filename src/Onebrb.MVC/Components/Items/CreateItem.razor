@@ -3,14 +3,18 @@
 @using Newtonsoft.Json
 @using System.Text
 @using System.Security.Claims
+@using System.Net.Http.Headers
+@using Onebrb.MVC.Constants 
 @inject NavigationManager navigationManager;
 @inject HttpClient Http
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <p>Publish new item</p>
-<p class="@notifyBarClass">@onSubmitResult</p>
-<p class="@notifyBarClass">@selectedCategory</p>
+<p class="@notifyBarClass">@OnSubmitResult</p>
 
-<EditForm Model="@Item" OnSubmit="HandleSubmit">
+<EditForm Model="@Item" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <div class="form-group">
         <label for="itemTitle">
             Title
@@ -23,7 +27,7 @@
             Category
         </label>
 
-        <InputSelect @bind-Value="SelectedCategory" id="itemCategories" class="form-control">
+        <InputSelect @bind-Value="SelectedCategoryId" id="itemCategories" class="form-control">
             @foreach (var category in Model.Categories)
             {
                 <option value="@category.Id">@category.Name</option>
@@ -46,50 +50,98 @@
         <InputNumber @bind-Value="Item.Price" id="itemPrice" class="form-control" />
     </div>
 
-    <button type="submit" class="btn btn-success">Publish</button>
+    <button type="submit" class="@BtnSubmitCss">@PublishBtnText</button>
 </EditForm>
 @{
 }
 
 
 @code {
-    [Parameter]
-    public CreateItemViewModel Model { get; set; }
+        [Parameter]
+        public CreateItemViewModel Model { get; set; }
 
-    [Parameter]
-    public string CurrentUserId { get; set; }
+        [Parameter]
+        public string CurrentUserId { get; set; }
 
-    CreateItemRequestModel Item = new CreateItemRequestModel();
-    public string SelectedCategory { get; set; }
+        CreateItemRequestModel Item = new CreateItemRequestModel();
+    public string SelectedCategoryId { get; set; }
 
-    public string onSubmitResult { get; set; }
+    // Form
+    public bool IsFormEnabled { get; set; } = true;
+
+    // Misc
+    public string OnSubmitResult { get; set; }
     public string notifyBarClass { get; set; }
-    public string selectedCategory { get; set; }
+    public string OnebrbApiToken { get; set; }
 
-    private async Task HandleSubmit()
+    // Button
+    public string PublishBtnText { get; set; } = "Publish";
+    public string BtnSubmitCss { get; set; } = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess}";
+
+    private async Task HandleValidSubmit()
     {
-        notifyBarClass = "alert-notify";
-        onSubmitResult = $"Selected option {SelectedCategory}";
+        if (!IsFormEnabled)
+        {
+            return;
+        }
+
+        IsFormEnabled = false;
+
+        notifyBarClass = BootstrapCssConst.AlertInfo;
+        OnSubmitResult = $"Please wait...";
+        PublishBtnText = "Publishing...";
+        BtnSubmitCss = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess} {BootstrapCssConst.Disabled}";
 
         try
         {
-            // Add additional stuff
-            Item.CategoryId = int.Parse(SelectedCategory);
+            Item.CategoryId = int.Parse(SelectedCategoryId);
             Item.UserId = CurrentUserId;
 
             var json = JsonConvert.SerializeObject(Item);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
+            Http.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", OnebrbApiToken);
+
             var response = await Http.PostAsync($"https://localhost:44307/api/Items/Create", data);
 
             string result = response.Content.ReadAsStringAsync().Result;
-
-            ////onSubmitResult = SelectedCategory;
+            IsFormEnabled = false;
+            notifyBarClass = BootstrapCssConst.AlertSuccess;
+            OnSubmitResult = $"The item was published successfuly!";
+            PublishBtnText = "Published";
         }
         catch (Exception)
         {
-            onSubmitResult = "Couldn't publish the item, please try again later...";
+            notifyBarClass = $"{BootstrapCssConst.AlertDanger}";
+            OnSubmitResult = "Couldn't publish the item, please try again later...";
+            PublishBtnText = "Publish";
+            BtnSubmitCss = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess}";
         }
 
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        SelectedCategoryId = Model.Categories.First().Id.ToString();
+        OnebrbApiToken = await localStorage.GetItemAsync<string>("OnebrbApiToken");
+
+        if (string.IsNullOrWhiteSpace(OnebrbApiToken))
+        {
+            try
+            {
+                var response = await Http.GetAsync($"https://localhost:44308/api/token");
+
+                string result = response.Content.ReadAsStringAsync().Result;
+                OnSubmitResult = result;
+                await localStorage.SetItemAsync("OnebrbApiToken", result);
+
+                OnebrbApiToken = await localStorage.GetItemAsync<string>("OnebrbApiToken");
+            }
+            catch (Exception)
+            {
+                OnSubmitResult = "Couldn't publish the item, please try again later...";
+            }
+        }
     }
 }

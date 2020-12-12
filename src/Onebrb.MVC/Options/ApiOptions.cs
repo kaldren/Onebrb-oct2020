@@ -1,6 +1,6 @@
 ﻿namespace Onebrb.MVC.Config
 {
-    public class TokenOptions
+    public class ApiOptions
     {
         public const string Token = "Token";
 
