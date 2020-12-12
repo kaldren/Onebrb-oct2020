@@ -70,8 +70,9 @@ namespace Onebrb.MVC
                     options.SupportedUICultures = supportedCultures;
 
                     options.RequestCultureProviders.Clear();
-                    options.RequestCultureProviders.Insert(0, new RouteDataRequestCultureProvider());
-                    options.RequestCultureProviders.Insert(1, new QueryStringRequestCultureProvider());
+                    options.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
+                    //options.RequestCultureProviders.Insert(1, new RouteDataRequestCultureProvider());
+                    //options.RequestCultureProviders.Insert(2, new QueryStringRequestCultureProvider());
                 }
             );
 
