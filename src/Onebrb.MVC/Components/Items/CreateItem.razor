@@ -1,16 +1,27 @@
 ﻿@using Onebrb.MVC.Models.Item
 @using System.Net.Http
-@using Newtonsoft.Json
 @using System.Text
 @using System.Security.Claims
 @using System.Net.Http.Headers
 @using Onebrb.MVC.Constants
+@using System.Text.Json;
+@using System.Text.Json.Serialization;
 @inject NavigationManager navigationManager
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 <p>Publish new item</p>
 <p class="@notifyBarClass">@OnSubmitResult</p>
+
+@if (IsItemCreated)
+{
+    <div>
+        <NavLink class="btn btn-primary view-created-item" href="@CreatedItemUrl" Match="NavLinkMatch.All">
+            <span>Click here to view the item</span>
+        </NavLink>
+    </div>
+}
+
 
 <EditForm Model="@Item" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -19,7 +30,7 @@
         <label for="itemTitle">
             Title
         </label>
-        <InputText @bind-Value="Item.Title" id="itemTitle" class="form-control" />
+        <InputText @bind-Value="Item.Title" id="itemTitle" class="form-control" disabled="@(IsFormEnabled == false)" />
     </div>
 
     <div class="form-group">
@@ -27,7 +38,7 @@
             Category
         </label>
 
-        <InputSelect @bind-Value="SelectedCategoryId" id="itemCategories" class="form-control">
+        <InputSelect @bind-Value="SelectedCategoryId" id="itemCategories" class="form-control" disabled="@(IsFormEnabled == false)">
             @foreach (var category in Model.Categories)
             {
                 <option value="@category.Id">@category.Name</option>
@@ -39,7 +50,7 @@
         <label for="itemDescription">
             Description:
         </label>
-        <InputTextArea @bind-Value="Item.Description" id="itemDescription" class="form-control" />
+        <InputTextArea @bind-Value="Item.Description" id="itemDescription" class="form-control" disabled="@(IsFormEnabled == false)" />
     </div>
 
 
@@ -47,10 +58,10 @@
         <label for="itemPrice">
             Price
         </label>
-        <InputNumber @bind-Value="Item.Price" id="itemPrice" class="form-control" />
+        <InputNumber @bind-Value="Item.Price" id="itemPrice" class="form-control" disabled="@(IsFormEnabled == false)" />
     </div>
 
-    <button type="submit" class="@BtnSubmitCss">@PublishBtnText</button>
+    <button type="submit" class="@BtnSubmitCss" disabled="@(IsFormEnabled == false)">@PublishBtnText</button>
 </EditForm>
 @{
 }
@@ -78,6 +89,10 @@
     public string PublishBtnText { get; set; } = "Publish";
     public string BtnSubmitCss { get; set; } = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess}";
 
+    public string CreatedItemUrl { get; set; }
+
+    public bool IsItemCreated { get; set; }
+
     private async Task HandleValidSubmit()
     {
         if (!IsFormEnabled)
@@ -90,13 +105,17 @@
         notifyBarClass = BootstrapCssConst.AlertInfo;
         OnSubmitResult = $"Please wait...";
         PublishBtnText = "Publishing...";
-        BtnSubmitCss = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess} {BootstrapCssConst.Disabled}";
 
         string scheme = HttpContextAccessor.HttpContext.Request.Scheme;
         string host = HttpContextAccessor.HttpContext.Request.Host.Value;
         string pathBase = HttpContextAccessor.HttpContext.Request.PathBase;
 
-        string createItemEndpoint = $"{scheme}://{host}{pathBase}/api/Items/Create";
+        string mvcBaseUrl = $"{scheme}://{host}{pathBase}";
+        string mvcItemEndpoint = $"{mvcBaseUrl}/items";
+
+        string apiBaseUrl = "https://localhost:44307";
+        string createItemEndpoint = $"{apiBaseUrl}/api/Items/Create";
+        string itemsEndpoint = $"{apiBaseUrl}/api/Items";
 
         try
         {
@@ -108,23 +127,27 @@
             Item.CategoryId = int.Parse(SelectedCategoryId);
             Item.UserId = CurrentUserId;
 
-            var json = JsonConvert.SerializeObject(Item);
+            var json = JsonSerializer.Serialize(Item);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
             var apiToken = HttpContextAccessor.HttpContext.Request.Cookies["OnebrbApiToken"];
-            OnSubmitResult = apiToken;
 
             Http.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", apiToken);
 
             var response = await Http.PostAsync($"{createItemEndpoint}", data);
 
-            string result = response.Content.ReadAsStringAsync().Result;
+            string responseJson = response.Content.ReadAsStringAsync().Result;
             IsFormEnabled = false;
             notifyBarClass = BootstrapCssConst.AlertSuccess;
-            //OnSubmitResult = $"The item was published successfuly!";
-            // {"id":59,"title":"asddadas","description":"asddsadsa","price":5.0,"categoryId":1,"userId":"8a3bc02b-b72d-4810-a6b7-9d82aa42ffde","user":null}
-            OnSubmitResult = result;
+            var createdItem = JsonSerializer.Deserialize<CreateItemResponseModel>(responseJson, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            });
+
+            IsItemCreated = true;
+            OnSubmitResult = $"The item was published successfuly!";
             PublishBtnText = "Published";
+            CreatedItemUrl = $"{mvcItemEndpoint}/{createdItem.Id}";
         }
         catch (Exception)
         {
