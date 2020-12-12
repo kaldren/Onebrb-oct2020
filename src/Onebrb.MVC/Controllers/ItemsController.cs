@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -8,11 +9,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Client;
+using Newtonsoft.Json;
 using Onebrb.Core.Models;
 using Onebrb.MVC.Models.Item;
 using Onebrb.Services;
 using Onebrb.Services.Categories;
+using Onebrb.Services.Helpers;
 using Onebrb.Services.Items;
+using Onebrb.Services.Models.Category;
 
 namespace Onebrb.MVC.Controllers
 {
@@ -54,17 +58,26 @@ namespace Onebrb.MVC.Controllers
         {
             // Get from API
 
+            BaseApiResponse<ICollection<CategoryServiceModel>> categories;
+
             using (var httpClient = new HttpClient())
             {
                 using (var response = await httpClient.GetAsync($"{_configuration["Api:BaseAddress"]}/api/categories"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
+                    categories = JsonConvert.DeserializeObject<BaseApiResponse<ICollection<CategoryServiceModel>>>(apiResponse);
+
+                    if (categories == null)
+                    {
+                        // Todo: exceptions intercecptor
+                        throw new Exception("Couldn't fetch categories");
+                    }
                 }
             }
 
             var viewModel = new CreateItemViewModel
             {
-                Categories = null//categories
+                Categories = categories.Response
             };
 
             return View(viewModel);

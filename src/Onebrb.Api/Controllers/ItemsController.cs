@@ -61,7 +61,7 @@ namespace Onebrb.Api.Controllers
         /// </summary>
         /// <param name="model">The request model</param>
         /// <returns>The created item</returns>
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("create")]
         [Route("api/[controller]/create")]
         public async Task<IActionResult> CreateItem(ItemRequestModel model)

@@ -1,4 +1,4 @@
-﻿namespace Onebrb.Api.Helpers
+﻿namespace Onebrb.Services.Helpers
 {
     public class BaseApiResponse<TResponse>
     {

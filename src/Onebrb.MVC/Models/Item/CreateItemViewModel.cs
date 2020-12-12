@@ -1,13 +1,10 @@
-﻿using Onebrb.Core.Models;
-using System;
+﻿using Onebrb.Services.Models.Category;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Onebrb.MVC.Models.Item
 {
     public class CreateItemViewModel
     {
-        public ICollection<Category> Categories { get; set; }
+        public ICollection<CategoryServiceModel> Categories { get; set; }
     }
 }
