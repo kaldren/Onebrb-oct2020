@@ -57,13 +57,13 @@
 
 
 @code {
-        [Parameter]
-        public CreateItemViewModel Model { get; set; }
+    [Parameter]
+    public CreateItemViewModel Model { get; set; }
 
-        [Parameter]
-        public string CurrentUserId { get; set; }
+    [Parameter]
+    public string CurrentUserId { get; set; }
 
-        CreateItemRequestModel Item = new CreateItemRequestModel();
+    CreateItemRequestModel Item = new CreateItemRequestModel();
     public string SelectedCategoryId { get; set; }
 
     // Form
@@ -108,7 +108,9 @@
             string result = response.Content.ReadAsStringAsync().Result;
             IsFormEnabled = false;
             notifyBarClass = BootstrapCssConst.AlertSuccess;
-            OnSubmitResult = $"The item was published successfuly!";
+            //OnSubmitResult = $"The item was published successfuly!";
+            // {"id":59,"title":"asddadas","description":"asddsadsa","price":5.0,"categoryId":1,"userId":"8a3bc02b-b72d-4810-a6b7-9d82aa42ffde","user":null}
+            OnSubmitResult = result;
             PublishBtnText = "Published";
         }
         catch (Exception)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Onebrb.Core.ResponseModels
+namespace Onebrb.Api.Models
 {
     public class UserResponseModel
     {
