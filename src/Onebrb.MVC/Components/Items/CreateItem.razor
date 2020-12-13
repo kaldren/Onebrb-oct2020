@@ -1,11 +1,10 @@
 ﻿@using Onebrb.MVC.Models.Item
 @using System.Net.Http
 @using System.Text
-@using System.Security.Claims
 @using System.Net.Http.Headers
 @using Onebrb.MVC.Constants
 @using System.Text.Json;
-@using System.Text.Json.Serialization;
+@using Onebrb.MVC.Components.Shared
 @inject NavigationManager navigationManager
 @inject HttpClient Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
@@ -16,9 +15,7 @@
 @if (IsItemCreated)
 {
     <div>
-        <NavLink class="btn btn-primary view-created-item" href="@CreatedItemUrl" Match="NavLinkMatch.All">
-            <span>Click here to view the item</span>
-        </NavLink>
+        <ButtonLinkComponent Url="@CreatedItemUrl" Text="Click here to view the item" Css="btn btn-primary view-created-item" />
     </div>
 }
 

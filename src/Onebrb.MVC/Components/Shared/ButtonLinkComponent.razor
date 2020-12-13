@@ -1,0 +1,12 @@
+﻿<NavLink class="@Css" href="@Url" Match="NavLinkMatch.All">
+    <span>@Text</span>
+</NavLink>
+
+@code {
+    [Parameter]
+    public string Url { get; set; }
+    [Parameter]
+    public string Text { get; set; }
+    [Parameter]
+    public string Css { get; set; }
+}
