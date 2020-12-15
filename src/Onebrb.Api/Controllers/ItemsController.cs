@@ -41,6 +41,11 @@ namespace Onebrb.Api.Controllers
         [HttpGet("{itemId:int}")]
         public async Task<IActionResult> GetItem(int itemId)
         {
+            if (itemId <= 0)
+            {
+                return BadRequest();
+            }
+
             ItemServiceModel item = await _itemService.GetItemAsync(itemId);
 
             if (item == null)
@@ -61,9 +66,9 @@ namespace Onebrb.Api.Controllers
         /// </summary>
         /// <param name="model">The request model</param>
         /// <returns>The created item</returns>
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("create")]
         [Route("api/[controller]/create")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> CreateItem(ItemRequestModel model)
         {
             if (model == null)
@@ -91,6 +96,11 @@ namespace Onebrb.Api.Controllers
         [HttpGet("{username}")]
         public async Task<IActionResult> GetItems(string username)
         {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return BadRequest();
+            }
+
             ICollection<ItemServiceModel> items = await _itemService.GetItemsAsync(username);
 
             if (items == null)
@@ -113,9 +123,14 @@ namespace Onebrb.Api.Controllers
         /// <param name="model">The item model</param>
         /// <returns>The updated item</returns>
         [HttpPatch("{itemId:int}")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> EditItem(int itemId, [FromBody] EditItemModel model)
         {
+            if (itemId <= 0 || model == null)
+            {
+                return BadRequest();
+            }
+
             // Check who the current user requesting editing is
             User currentUser = await this._userManager.GetUserAsync(this.User);
 
@@ -157,9 +172,14 @@ namespace Onebrb.Api.Controllers
         /// <param name="itemId">The item id</param>
         /// <returns>The deleted item</returns>
         [HttpDelete("{itemId:int}")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<IActionResult> Delete(int itemId)
         {
+            if (itemId <= 0)
+            {
+                return BadRequest();
+            }
+
             // Check who the current user requesting deletion is
             User currentUser = await this._userManager.GetUserAsync(this.User);
 
