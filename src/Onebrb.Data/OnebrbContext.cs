@@ -32,7 +32,10 @@ namespace Onebrb.Data
 
         public async Task<Item> GetItemAsync(int itemId)
         {
-            return await this.Items.SingleOrDefaultAsync(x => x.Id == itemId);
+            return await this.Items
+                .Include(x => x.Ratings)
+                .Include(x => x.User)
+                .SingleOrDefaultAsync(x => x.Id == itemId);
         }
 
         public async Task<ICollection<Item>> GetItemsAsync(string username)

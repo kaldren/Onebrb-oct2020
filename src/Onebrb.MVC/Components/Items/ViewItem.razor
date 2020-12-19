@@ -4,6 +4,8 @@
     <div id="item-profile">
         <p>@Item.Title</p>
 
+        <p>Rating: @Item.Ratings.Where(x => x.Value > 0).Count() | @Item.Ratings.Where(x => x.Value > 0).Count()</p>
+
         <div class="item-comments">
             Comments widget
         </div>

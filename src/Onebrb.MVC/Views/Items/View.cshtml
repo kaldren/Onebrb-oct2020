@@ -1,7 +1,17 @@
 ﻿@using Onebrb.MVC.Components.Items
 @model Onebrb.MVC.Models.Item.ItemViewModel
+@*<component type="typeof(Onebrb.MVC.Components.Items.ViewItem)" param-Item="Model" render-mode="ServerPrerendered" />*@
 
-<component type="typeof(Onebrb.MVC.Components.Items.ViewItem)" param-Item="Model" render-mode="ServerPrerendered" />
+<div id="item-profile">
+    <p>@Model.Title</p>
+
+    <p>Rating: (+) @Model.Ratings.Where(x => x.Value > 0).Count() | (-) @Model.Ratings.Where(x => x.Value < 0).Count()</p>
+
+    <div class="item-comments">
+        Comments widget
+    </div>
+</div>
+
 
 @{
 }
