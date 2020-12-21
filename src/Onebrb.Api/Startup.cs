@@ -19,6 +19,8 @@ using Onebrb.Services.Items;
 using Onebrb.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Onebrb.Services.Categories;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Onebrb.Api
 {
@@ -36,7 +38,12 @@ namespace Onebrb.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
 
             // TODO: Make db path futureproof
             //services.AddDbContext<OnebrbContext>(options => options.UseSqlite(@"Data Source=C:\Users\drens\source\repos\October2020\Onebrb\src\Onebrb.Data\Onebrb.db"));

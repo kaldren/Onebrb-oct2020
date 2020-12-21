@@ -87,14 +87,31 @@ namespace Onebrb.MVC.Controllers
                 return View();
             }
 
-            ItemServiceModel item = await _itemService.GetItemAsync(itemId.Value);
+            // Get from API
+            var apiOptions = new ApiOptions();
+            _configuration.GetSection(ApiOptions.Token).Bind(apiOptions);
 
-            if (item == null)
+            BaseApiResponse<ItemServiceModel> httpResponse;
+
+            using (var httpClient = new HttpClient())
             {
-                return View();
+                using (var response = await httpClient.GetAsync($"{apiOptions.BaseAddress}/api/items/{itemId}"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    httpResponse = JsonConvert.DeserializeObject<BaseApiResponse<ItemServiceModel>>(apiResponse);
+
+                    if (httpResponse == null)
+                    {
+                        // Todo: exceptions intercecptor
+                        throw new Exception("Couldn't fetch item");
+                    }
+                }
             }
 
-            var itemViewModel = this._mapper.Map<ItemViewModel>(item);
+            //ItemServiceModel item = await _itemService.GetItemAsync(itemId.Value);
+            ItemServiceModel itemModel = this._mapper.Map<ItemServiceModel>(httpResponse.Response);
+
+            var itemViewModel = this._mapper.Map<ItemViewModel>(itemModel);
 
             return View(itemViewModel);
         }
