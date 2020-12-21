@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
+using Dawn;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Onebrb.MVC.Config;
+using Onebrb.MVC.Helpers;
 using Onebrb.MVC.Models.Item;
+using Onebrb.MVC.Services;
 using Onebrb.Services;
 using Onebrb.Services.Categories;
 using Onebrb.Services.Helpers;
@@ -22,16 +25,20 @@ namespace Onebrb.MVC.Controllers
     {
         private readonly IItemService _itemService;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
+        private readonly IApiService apiService;
 
         public ItemsController(
             IItemService itemService,
             IMapper mapper,
-            IConfiguration configuration)
+            IApiService apiService)
         {
+            Guard.Argument(itemService, nameof(itemService)).NotNull();
+            Guard.Argument(mapper, nameof(mapper)).NotNull();
+            Guard.Argument(apiService, nameof(apiService)).NotNull();
+
             _itemService = itemService;
             _mapper = mapper;
-            _configuration = configuration;
+            this.apiService = apiService;
         }
 
         [HttpPost]
@@ -50,30 +57,11 @@ namespace Onebrb.MVC.Controllers
         [Route("items/create")]
         public async Task<ViewResult> Create()
         {
-            // Get from API
-            var apiOptions = new ApiOptions();
-            _configuration.GetSection(ApiOptions.Token).Bind(apiOptions);
-
-            BaseApiResponse<ICollection<CategoryServiceModel>> categories;
-
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync($"{apiOptions.BaseAddress}/api/categories"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    categories = JsonConvert.DeserializeObject<BaseApiResponse<ICollection<CategoryServiceModel>>>(apiResponse);
-
-                    if (categories == null)
-                    {
-                        // Todo: exceptions intercecptor
-                        throw new Exception("Couldn't fetch categories");
-                    }
-                }
-            }
+            var httpResponse = await this.apiService.HttpGetRequest<ICollection<CategoryServiceModel>>($"api/categories");
 
             var viewModel = new CreateItemViewModel
             {
-                Categories = categories.Response
+                Categories = httpResponse.Response
             };
 
             return View(viewModel);
@@ -87,28 +75,8 @@ namespace Onebrb.MVC.Controllers
                 return View();
             }
 
-            // Get from API
-            var apiOptions = new ApiOptions();
-            _configuration.GetSection(ApiOptions.Token).Bind(apiOptions);
+            var httpResponse = await this.apiService.HttpGetRequest<ItemServiceModel>($"api/items/{itemId}");
 
-            BaseApiResponse<ItemServiceModel> httpResponse;
-
-            using (var httpClient = new HttpClient())
-            {
-                using (var response = await httpClient.GetAsync($"{apiOptions.BaseAddress}/api/items/{itemId}"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    httpResponse = JsonConvert.DeserializeObject<BaseApiResponse<ItemServiceModel>>(apiResponse);
-
-                    if (httpResponse == null)
-                    {
-                        // Todo: exceptions intercecptor
-                        throw new Exception("Couldn't fetch item");
-                    }
-                }
-            }
-
-            //ItemServiceModel item = await _itemService.GetItemAsync(itemId.Value);
             ItemServiceModel itemModel = this._mapper.Map<ItemServiceModel>(httpResponse.Response);
 
             var itemViewModel = this._mapper.Map<ItemViewModel>(itemModel);

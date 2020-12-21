@@ -24,6 +24,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Onebrb.Services.Categories;
 using System.Net.Http;
+using Onebrb.MVC.Helpers;
+using Onebrb.MVC.Services;
 
 namespace Onebrb.MVC
 {
@@ -87,6 +89,7 @@ namespace Onebrb.MVC
             services.AddTransient<IOnebrbContext, OnebrbContext>();
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IApiService, ApiService>();
 
             services.AddHttpClient();
             services.AddScoped<HttpClient>();
