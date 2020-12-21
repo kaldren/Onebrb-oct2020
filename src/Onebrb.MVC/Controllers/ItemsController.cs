@@ -92,14 +92,14 @@ namespace Onebrb.MVC.Controllers
                 return View();
             }
 
-            ICollection<ItemServiceModel> items = await _itemService.GetItemsAsync(username);
+            var httpResponse = await this.apiService.HttpGetRequest<ICollection<ItemServiceModel>>($"api/items/{username}");
 
-            if (items == null)
+            if (httpResponse == null)
             {
                 return View();
             }
 
-            var itemsViewModel = this._mapper.Map<ICollection<ItemViewModel>>(items);
+            var itemsViewModel = this._mapper.Map<ICollection<ItemViewModel>>(httpResponse.Response);
 
             return View(itemsViewModel);
         }

@@ -47,7 +47,12 @@ namespace Onebrb.Data
                 return null;
             }
 
-            return await this.Items.Where(x => x.UserId == user.Id).ToListAsync();
+            return await this.Items
+                                .Include(x => x.User)
+                                .Include(x => x.Category)
+                                .Include(x => x.Ratings)
+                                .Where(x => x.UserId == user.Id)
+                                .ToListAsync();
         }
 
         public async Task<bool> DeleteAsync(int itemId)
