@@ -22,6 +22,7 @@ namespace Onebrb.Api.Controllers
             _categoryService = categoryService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetAllCategoriesAsync()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();

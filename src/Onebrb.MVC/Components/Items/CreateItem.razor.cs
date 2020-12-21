@@ -67,7 +67,7 @@ namespace Onebrb.MVC.Components.Items
             string mvcItemEndpoint = $"{mvcBaseUrl}/items";
 
             string apiBaseUrl = "https://localhost:44307";
-            string createItemEndpoint = $"{apiBaseUrl}/api/Items/Create";
+            string createItemEndpoint = $"{apiBaseUrl}/api/items/create";
 
             try
             {
