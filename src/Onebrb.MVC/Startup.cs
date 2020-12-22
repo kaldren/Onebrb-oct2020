@@ -26,6 +26,7 @@ using Onebrb.Services.Categories;
 using System.Net.Http;
 using Onebrb.MVC.Helpers;
 using Onebrb.MVC.Services;
+using OnebrbApiClient;
 
 namespace Onebrb.MVC
 {
@@ -90,6 +91,9 @@ namespace Onebrb.MVC
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IApiService, ApiService>();
+
+            // Autorest
+            services.AddTransient<IOnebrbApi, OnebrbApi>();
 
             services.AddHttpClient();
             services.AddScoped<HttpClient>();

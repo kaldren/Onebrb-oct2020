@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Onebrb.Services.Categories;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using System.Reflection;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Onebrb.Api
 {
@@ -78,7 +80,11 @@ namespace Onebrb.Api
                     options.Authority = $"{Configuration["AAD:InstanceId"]}{Configuration["AAD:TenantId"]}";
                 });
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+
+                c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null)
+                
+                );
 
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<ICategoryService, CategoryService>();
@@ -96,7 +102,7 @@ namespace Onebrb.Api
             app.UseHttpsRedirection();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
+            app.UseSwagger(o => o.SerializeAsV2 = true);
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
