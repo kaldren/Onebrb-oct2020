@@ -18,9 +18,9 @@ namespace OnebrbApiClient
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
-            public static void GetAllCategoriesAsync(this IOnebrbApi operations)
+            public static CategoryServiceModelICollectionBaseApiResponse GetAllCategories(this IOnebrbApi operations)
             {
-                operations.GetAllCategoriesAsyncAsync().GetAwaiter().GetResult();
+                return operations.GetAllCategoriesAsync().GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -29,9 +29,12 @@ namespace OnebrbApiClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task GetAllCategoriesAsyncAsync(this IOnebrbApi operations, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<CategoryServiceModelICollectionBaseApiResponse> GetAllCategoriesAsync(this IOnebrbApi operations, CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.GetAllCategoriesAsyncWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false)).Dispose();
+                using (var _result = await operations.GetAllCategoriesWithHttpMessagesAsync(null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
             /// <param name='operations'>
@@ -39,9 +42,9 @@ namespace OnebrbApiClient
             /// </param>
             /// <param name='itemId'>
             /// </param>
-            public static void GetItem(this IOnebrbApi operations, int itemId)
+            public static ItemServiceModelBaseApiResponse GetItem(this IOnebrbApi operations, int itemId)
             {
-                operations.GetItemAsync(itemId).GetAwaiter().GetResult();
+                return operations.GetItemAsync(itemId).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -52,9 +55,12 @@ namespace OnebrbApiClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task GetItemAsync(this IOnebrbApi operations, int itemId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ItemServiceModelBaseApiResponse> GetItemAsync(this IOnebrbApi operations, int itemId, CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.GetItemWithHttpMessagesAsync(itemId, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                using (var _result = await operations.GetItemWithHttpMessagesAsync(itemId, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
             /// <param name='operations'>
@@ -112,9 +118,9 @@ namespace OnebrbApiClient
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static void CreateItem(this IOnebrbApi operations, ItemRequestModel body = default(ItemRequestModel))
+            public static ItemServiceModelBaseApiResponse CreateItem(this IOnebrbApi operations, ItemRequestModel body = default(ItemRequestModel))
             {
-                operations.CreateItemAsync(body).GetAwaiter().GetResult();
+                return operations.CreateItemAsync(body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -125,9 +131,12 @@ namespace OnebrbApiClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task CreateItemAsync(this IOnebrbApi operations, ItemRequestModel body = default(ItemRequestModel), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ItemServiceModelBaseApiResponse> CreateItemAsync(this IOnebrbApi operations, ItemRequestModel body = default(ItemRequestModel), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.CreateItemWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                using (var _result = await operations.CreateItemWithHttpMessagesAsync(body, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
             /// <param name='operations'>
@@ -135,9 +144,9 @@ namespace OnebrbApiClient
             /// </param>
             /// <param name='username'>
             /// </param>
-            public static void GetItems(this IOnebrbApi operations, string username)
+            public static ItemServiceModelICollectionBaseApiResponse GetItems(this IOnebrbApi operations, string username)
             {
-                operations.GetItemsAsync(username).GetAwaiter().GetResult();
+                return operations.GetItemsAsync(username).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -148,9 +157,12 @@ namespace OnebrbApiClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task GetItemsAsync(this IOnebrbApi operations, string username, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ItemServiceModelICollectionBaseApiResponse> GetItemsAsync(this IOnebrbApi operations, string username, CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.GetItemsWithHttpMessagesAsync(username, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                using (var _result = await operations.GetItemsWithHttpMessagesAsync(username, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
             }
 
     }

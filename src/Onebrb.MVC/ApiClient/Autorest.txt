@@ -1,0 +1,1 @@
+﻿autorest --input-file=onebrb.json --csharp --output-folder=OnebrbApiClient --namespace=OnebrbApiClient

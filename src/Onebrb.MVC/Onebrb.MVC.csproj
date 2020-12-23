@@ -11,6 +11,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ApiExplorer" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.24.0" />
@@ -20,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Onebrb.Data\Onebrb.Data.csproj" />
-    <ProjectReference Include="..\Onebrb.Services\Onebrb.Services.csproj" />
   </ItemGroup>
 
 </Project>

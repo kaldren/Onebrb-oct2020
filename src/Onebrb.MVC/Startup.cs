@@ -1,30 +1,20 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Onebrb.Data;
 using Onebrb.Core.Models;
-using Onebrb.Services.Services;
 using AutoMapper;
-using Onebrb.Services.Items;
 using Onebrb.MVC.Constants;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Razor;
-using Onebrb.Services.Categories;
 using System.Net.Http;
-using Onebrb.MVC.Helpers;
 using Onebrb.MVC.Services;
 using OnebrbApiClient;
 
@@ -88,12 +78,10 @@ namespace Onebrb.MVC
             services.AddAutoMapper(typeof(Startup));
 
             services.AddTransient<IOnebrbContext, OnebrbContext>();
-            services.AddTransient<IItemService, ItemService>();
-            services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IApiService, ApiService>();
 
             // Autorest
-            services.AddTransient<IOnebrbApi, OnebrbApi>();
+            //services.AddTransient<IOnebrbApi, OnebrbApi>();
 
             services.AddHttpClient();
             services.AddScoped<HttpClient>();

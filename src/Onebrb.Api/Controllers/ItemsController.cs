@@ -39,7 +39,7 @@ namespace Onebrb.Api.Controllers
         /// <param name="itemId">The item id</param>
         /// <returns>The item</returns>
         [HttpGet("{itemId:int}")]
-        public async Task<IActionResult> GetItem(int itemId)
+        public async Task<ActionResult<BaseApiResponse<ItemServiceModel>>> GetItem(int itemId)
         {
             if (itemId <= 0)
             {
@@ -57,7 +57,7 @@ namespace Onebrb.Api.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Returned item",
-                Response = item
+                Body = item
             });
         }
 
@@ -67,9 +67,8 @@ namespace Onebrb.Api.Controllers
         /// <param name="model">The request model</param>
         /// <returns>The created item</returns>
         [HttpPost("create")]
-        //[Route("api/[controller]/create")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> CreateItem(ItemRequestModel model)
+        public async Task<ActionResult<BaseApiResponse<ItemServiceModel>>> CreateItem(ItemRequestModel model)
         {
             if (model == null)
             {
@@ -85,7 +84,12 @@ namespace Onebrb.Api.Controllers
                 return BadRequest();
             }
 
-            return Created($"{ApiEndpoints.Users}/{item.Id}", item);
+            return Ok(new BaseApiResponse<ItemServiceModel>
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Message = "Created item",
+                Body = item
+            });
         }
 
         /// <summary>
@@ -94,7 +98,7 @@ namespace Onebrb.Api.Controllers
         /// <param name="username">The username of the author</param>
         /// <returns>All items by given username</returns>
         [HttpGet("{username}")]
-        public async Task<IActionResult> GetItems(string username)
+        public async Task<ActionResult<BaseApiResponse<ICollection<ItemServiceModel>>>> GetItems(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -112,7 +116,7 @@ namespace Onebrb.Api.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "List of items.",
-                Response = items
+                Body = items
             });
         }
 
@@ -162,7 +166,7 @@ namespace Onebrb.Api.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Edited item",
-                Response = item
+                Body = item
             });
         }
 
@@ -213,7 +217,7 @@ namespace Onebrb.Api.Controllers
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Item deleted successfuly.",
-                Response = item
+                Body = item
             });
         }
     }

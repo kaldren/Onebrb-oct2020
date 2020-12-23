@@ -23,21 +23,26 @@ namespace Onebrb.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCategoriesAsync()
+        public async Task<BaseApiResponse<ICollection<CategoryServiceModel>>> GetAllCategories()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
 
             if (categories == null)
             {
-                return BadRequest();
+                new BaseApiResponse<ICollection<CategoryServiceModel>>
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = "Couldn't fetch categories.",
+                    Body = Enumerable.Empty<CategoryServiceModel>().ToList()
+                };
             }
 
-            return Ok(new BaseApiResponse<IEnumerable<CategoryServiceModel>>
+            return new BaseApiResponse<ICollection<CategoryServiceModel>>
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "List of categories",
-                Response = categories
-            });
+                Body = categories
+            };
         }
     }
 }

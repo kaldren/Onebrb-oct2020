@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using Onebrb.MVC.Models.Item;
-using Onebrb.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using OnebrbApiClient.Models;
 
 namespace Onebrb.MVC.Mappings
 {

@@ -40,7 +40,7 @@ namespace OnebrbApiClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> GetAllCategoriesAsyncWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<CategoryServiceModelICollectionBaseApiResponse>> GetAllCategoriesWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='itemId'>
         /// </param>
@@ -50,7 +50,7 @@ namespace OnebrbApiClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> GetItemWithHttpMessagesAsync(int itemId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ItemServiceModelBaseApiResponse>> GetItemWithHttpMessagesAsync(int itemId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='itemId'>
         /// </param>
@@ -82,7 +82,7 @@ namespace OnebrbApiClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> CreateItemWithHttpMessagesAsync(ItemRequestModel body = default(ItemRequestModel), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ItemServiceModelBaseApiResponse>> CreateItemWithHttpMessagesAsync(ItemRequestModel body = default(ItemRequestModel), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='username'>
         /// </param>
@@ -92,7 +92,7 @@ namespace OnebrbApiClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> GetItemsWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ItemServiceModelICollectionBaseApiResponse>> GetItemsWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
     }
 }
