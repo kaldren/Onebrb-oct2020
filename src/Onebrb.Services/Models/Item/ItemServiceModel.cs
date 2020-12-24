@@ -13,7 +13,9 @@ namespace Onebrb.Services
         public decimal? Price { get; set; }
         public int CategoryId { get; set; }
         public string UserId { get; set; }
-        public User User { get; set; }
+        public string UserFirstName { get; set; }
+        public string UserLastName { get; set; }
+        public string UserEmail { get; set; }
         public ICollection<Rating> Ratings { get; set; }
     }
 }

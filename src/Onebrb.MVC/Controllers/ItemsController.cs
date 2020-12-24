@@ -21,8 +21,6 @@ namespace Onebrb.MVC.Controllers
         private readonly IConfiguration _configuration;
         private readonly ApiOptions _apiOptions;
 
-        //private readonly IOnebrbApi _onebrbApi;
-
         public ItemsController(
             IMapper mapper,
             IConfiguration configuration)

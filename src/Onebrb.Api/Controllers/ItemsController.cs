@@ -147,7 +147,7 @@ namespace Onebrb.Api.Controllers
             }
 
             // Check if the item is hes/hers to edit
-            if (item.User.Id != currentUser.Id)
+            if (item.UserId != currentUser.Id)
             {
                 return Unauthorized();
             }
@@ -196,7 +196,7 @@ namespace Onebrb.Api.Controllers
             }
 
             // Check if the item is hes/hers to delete
-            if (item.User.Id != currentUser.Id)
+            if (item.UserId != currentUser.Id)
             {
                 return Unauthorized();
             }
