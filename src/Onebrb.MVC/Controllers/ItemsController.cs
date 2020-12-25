@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Dawn;
@@ -113,6 +115,31 @@ namespace Onebrb.MVC.Controllers
                 var itemsViewModel = this._mapper.Map<ICollection<ItemViewModel>>(httpResponse.Body);
 
                 return View(itemsViewModel);
+            }
+        }
+
+        [HttpGet]
+        [Route("items/edit/{itemId:int}")]
+        [Authorize]
+        public async Task<ViewResult> Edit(int itemId)
+        {
+            string currentUserId = this.User.Claims.FirstOrDefault(c => c.Type == "Id").Value;
+
+            using (var client = new OnebrbApi())
+            {
+                client.BaseUri = new Uri(_apiOptions.BaseAddress, UriKind.Absolute);
+                var response = await client.GetItemAsync(itemId);
+
+                ItemServiceModel itemModel = this._mapper.Map<ItemServiceModel>(response.Body);
+
+                EditItemViewModel editItemViewModel = this._mapper.Map<EditItemViewModel>(itemModel);
+
+                if (editItemViewModel.UserId != currentUserId)
+                {
+                    return View();
+                }
+
+                return View(editItemViewModel);
             }
         }
     }

@@ -1,0 +1,40 @@
+﻿@using Onebrb.MVC.Components.Shared
+
+<p>Edit @Item.Title</p>
+<p class="@notifyBarClass">@OnSubmitResult</p>
+
+@if (IsItemCreated)
+{
+    <div>
+        <ButtonLinkComponent Url="@EditedItemUrl" Text="Click here to view the item" Css="btn btn-primary view-created-item" />
+    </div>
+}
+
+
+<EditForm Model="Item" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="itemTitle">
+            Title
+        </label>
+        <InputText @bind-Value="Item.Title" id="itemTitle" class="form-control" disabled="@(IsFormEnabled == false)" />
+    </div>
+
+    <div class="form-group">
+        <label for="itemDescription">
+            Description:
+        </label>
+        <InputTextArea @bind-Value="Item.Description" id="itemDescription" class="form-control" disabled="@(IsFormEnabled == false)" />
+    </div>
+
+
+    <div class="form-group">
+        <label for="itemPrice">
+            Price
+        </label>
+        <InputNumber @bind-Value="Item.Price" id="itemPrice" class="form-control" disabled="@(IsFormEnabled == false)" />
+    </div>
+
+    <button type="submit" class="@BtnSubmitCss" disabled="@(IsFormEnabled == false)">@EditBtnText</button>
+</EditForm>

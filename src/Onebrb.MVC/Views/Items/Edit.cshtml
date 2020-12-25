@@ -1,0 +1,37 @@
+﻿@using Onebrb.MVC.Components.Items
+@model Onebrb.MVC.Models.Item.EditItemViewModel
+@*<component type="typeof(Onebrb.MVC.Components.Items.ViewItem)" param-Item="Model" render-mode="ServerPrerendered" />*@
+
+@if (User.Identity.IsAuthenticated)
+{
+    string currentUserId = this.User.Claims.FirstOrDefault(x => x.Type == "Id").Value;
+    <component type="typeof(Onebrb.MVC.Components.Items.EditItem)" param-Item="Model" param-CurrentUserId="currentUserId" render-mode="ServerPrerendered" />
+}
+
+@*<h2>Edit @Model.Title</h2>
+
+    <form class="form-group" asp-controller="Items" asp-action="Edit" method="post">
+        <div class="form-group">
+            <input class="form-control" type="text" asp-for="Title" />
+        </div>
+
+        <div class="form-group">
+            <input class="form-control" type="number" asp-for="Price" />
+        </div>
+
+        <div class="form-group">
+            <textarea class="form-control" type="text" asp-for="Description"></textarea>
+        </div>
+
+        <div class="form-group">
+            <input class="btn btn-success" type="submit" value="Edit" />
+            <input class="btn btn-danger" type="submit" value="Cancel" />
+        </div>
+    </form>*@
+
+@{
+}
+
+@section Scripts {
+    <script src="_framework/blazor.server.js"></script>
+}
