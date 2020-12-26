@@ -11,37 +11,16 @@
 {
     string currentUserId = this.User.Claims.FirstOrDefault(x => x.Type == "Id").Value;
 
-    var claims = this.User.Claims;
+    //var claims = this.User.Claims;
 
-    // Only the author of the product is allowed to edit it
-    if (currentUserId != Model.UserId)
-    {
-        return;
-    }
+    //// Only the author of the product is allowed to edit it
+    //if (currentUserId != Model.UserId)
+    //{
+    //    return;
+    //}
 
     <component type="typeof(Onebrb.MVC.Components.Items.EditItem)" param-Item="Model" param-CurrentUserId="currentUserId" render-mode="ServerPrerendered" />
 }
-
-@*<h2>Edit @Model.Title</h2>
-
-    <form class="form-group" asp-controller="Items" asp-action="Edit" method="post">
-        <div class="form-group">
-            <input class="form-control" type="text" asp-for="Title" />
-        </div>
-
-        <div class="form-group">
-            <input class="form-control" type="number" asp-for="Price" />
-        </div>
-
-        <div class="form-group">
-            <textarea class="form-control" type="text" asp-for="Description"></textarea>
-        </div>
-
-        <div class="form-group">
-            <input class="btn btn-success" type="submit" value="Edit" />
-            <input class="btn btn-danger" type="submit" value="Cancel" />
-        </div>
-    </form>*@
 
 @{
 }

@@ -126,7 +126,7 @@ namespace Onebrb.MVC.Controllers
         [Authorize]
         public async Task<ViewResult> Edit(int itemId)
         {
-            string currentUserId = this.User.Claims.FirstOrDefault(c => c.Type == "Id").Value;
+            string currentUserId = this.User.Claims.SingleOrDefault(c => c.Type == "Id").Value;
             string userSecurityHash = this.User.Claims.SingleOrDefault(c => c.Type == "SecurityHash").Value;
 
             using (var client = new OnebrbApi())
@@ -144,14 +144,7 @@ namespace Onebrb.MVC.Controllers
                 //    return View("Errors/NotFound");
                 //}
 
-                string securityHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                    password: currentUserId,
-                    salt: Encoding.ASCII.GetBytes(userSecurityHash),
-                    prf: KeyDerivationPrf.HMACSHA512,
-                    iterationCount: 10000,
-                    numBytesRequested: 256 / 8));
-
-                editItemViewModel.SecurityHash = securityHash;
+                editItemViewModel.SecurityHash = userSecurityHash;
 
                 return View(editItemViewModel);
             }
