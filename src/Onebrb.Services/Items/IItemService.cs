@@ -13,7 +13,7 @@ namespace Onebrb.Services.Items
         Task<ItemServiceModel> GetItemAsync(int itemId);
         Task<ICollection<ItemServiceModel>> GetItemsAsync(string username);
         Task<bool> Delete(DeleteItemModel model);
-        Task<bool> Edit(EditItemModel model);
+        Task<bool> Edit(EditItemRequestModel model);
         Task<ItemServiceModel> Create(ItemServiceModel item);
     }
 }

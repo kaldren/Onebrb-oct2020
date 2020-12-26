@@ -89,14 +89,25 @@ namespace Onebrb.MVC.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
+                // Logged in user
                 if (result.Succeeded)
                 {
-                    // Add Id claim
                     var user = await _userManager.FindByNameAsync(Input.UserName);
 
-                    var claimToAdd = new Claim("Id", user.Id);
+                    // Set user id claim
+                    if (!this.User.Claims.Any(x => x.Value == "Id"))
+                    {
+                        var userIdClaim = new Claim("Id", user.Id);
+                        await _userManager.AddClaimAsync(user, userIdClaim);
+                    }
 
-                    await _userManager.AddClaimAsync(user, claimToAdd);
+                    // Set security salt claim
+                    if (!this.User.Claims.Any(x => x.Value == "SecuritySalt"))
+                    {
+                        var securitySaltClaim = new Claim("SecuritySalt", user.SecuritySalt);
+                        await _userManager.AddClaimAsync(user, securitySaltClaim);
+                    }
 
                     // Getting bearer token from Azure AD once we're successfully logged in
                     var tokenOptions = new ApiOptions();

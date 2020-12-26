@@ -1,7 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Dawn;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -41,10 +47,7 @@ namespace Onebrb.Api.Controllers
         [HttpGet("{itemId:int}")]
         public async Task<ActionResult<BaseApiResponse<ItemServiceModel>>> GetItem(int itemId)
         {
-            if (itemId <= 0)
-            {
-                return BadRequest();
-            }
+            Guard.Argument(itemId, nameof(itemId)).GreaterThan(0);
 
             ItemServiceModel item = await _itemService.GetItemAsync(itemId);
 
@@ -70,10 +73,7 @@ namespace Onebrb.Api.Controllers
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<BaseApiResponse<ItemServiceModel>>> CreateItem(ItemRequestModel model)
         {
-            if (model == null)
-            {
-                return BadRequest();
-            }
+            Guard.Argument(model, nameof(model)).NotNull();
 
             var item = _mapper.Map<ItemServiceModel>(model);
 
@@ -100,10 +100,7 @@ namespace Onebrb.Api.Controllers
         [HttpGet("{username}")]
         public async Task<ActionResult<BaseApiResponse<ICollection<ItemServiceModel>>>> GetItems(string username)
         {
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                return BadRequest();
-            }
+            Guard.Argument(username, nameof(username)).NotWhiteSpace();
 
             ICollection<ItemServiceModel> items = await _itemService.GetItemsAsync(username);
 
@@ -128,15 +125,28 @@ namespace Onebrb.Api.Controllers
         /// <returns>The updated item</returns>
         [HttpPatch("{itemId:int}")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> EditItem(int itemId, [FromBody] EditItemModel model)
+        public async Task<IActionResult> EditItem(int itemId, [FromBody] EditItemRequestModel model)
         {
-            if (itemId <= 0 || model == null)
+            Guard.Argument(itemId, nameof(itemId)).GreaterThan(0);
+            Guard.Argument(model, nameof(model)).NotNull();
+
+
+            // Generate a 128-bit salt using a secure PRNG
+            byte[] salt = Encoding.ASCII.GetBytes("somesalt");
+
+            string securityHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: model.UserId,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+
+            if (securityHash != model.SecurityHash)
             {
+                // Invalid security hash
                 return BadRequest();
             }
-
-            // Check who the current user requesting editing is
-            User currentUser = await this._userManager.GetUserAsync(this.User);
 
             // Check if item exists
             ItemServiceModel item = await this._itemService.GetItemAsync(itemId);
@@ -144,12 +154,6 @@ namespace Onebrb.Api.Controllers
             if (item == null)
             {
                 return NotFound();
-            }
-
-            // Check if the item is hes/hers to edit
-            if (item.UserId != currentUser.Id)
-            {
-                return Unauthorized();
             }
 
             // Edit
@@ -177,12 +181,9 @@ namespace Onebrb.Api.Controllers
         /// <returns>The deleted item</returns>
         [HttpDelete("{itemId:int}")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> Delete(int itemId)
+        public async Task<IActionResult> DeleteItem(int itemId)
         {
-            if (itemId <= 0)
-            {
-                return BadRequest();
-            }
+            Guard.Argument(itemId, nameof(itemId)).GreaterThan(0);
 
             // Check who the current user requesting deletion is
             User currentUser = await this._userManager.GetUserAsync(this.User);

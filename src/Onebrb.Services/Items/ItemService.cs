@@ -58,7 +58,7 @@ namespace Onebrb.Services.Services
 
             return ObjectMapper.Mapper.Map<ICollection<ItemServiceModel>>(items);
         }
-        public async Task<bool> Edit(EditItemModel model)
+        public async Task<bool> Edit(EditItemRequestModel model)
         {
             var item = await this._onebrbContext.GetItemAsync(model.ItemId);
 

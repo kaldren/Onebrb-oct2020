@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Dawn;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Onebrb.MVC.Config;
@@ -134,10 +137,23 @@ namespace Onebrb.MVC.Controllers
 
                 EditItemViewModel editItemViewModel = this._mapper.Map<EditItemViewModel>(itemModel);
 
+                // Only the product author is allowed to edit it
                 if (editItemViewModel.UserId != currentUserId)
                 {
-                    return View();
+                    return View("Errors/NotFound");
                 }
+
+                // generate a 128-bit salt using a secure PRNG
+                byte[] salt = Encoding.ASCII.GetBytes("somesalt");
+
+                string securityHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: currentUserId,
+                    salt: salt,
+                    prf: KeyDerivationPrf.HMACSHA1,
+                    iterationCount: 10000,
+                    numBytesRequested: 256 / 8));
+
+                editItemViewModel.SecurityHash = securityHash;
 
                 return View(editItemViewModel);
             }

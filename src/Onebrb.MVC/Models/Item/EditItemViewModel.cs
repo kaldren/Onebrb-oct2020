@@ -13,5 +13,6 @@ namespace Onebrb.MVC.Models.Item
         public string Title { get; set; }
         public string Description { get; set; }
         public string UserId { get; set; }
+        public string SecurityHash { get; set; }
     }
 }

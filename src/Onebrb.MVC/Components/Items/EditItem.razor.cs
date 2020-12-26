@@ -63,20 +63,20 @@ namespace Onebrb.MVC.Components.Items
             string mvcItemEndpoint = $"{mvcBaseUrl}/items";
 
             string apiBaseUrl = "https://localhost:44307";
-            string createItemEndpoint = $"{apiBaseUrl}/api/items/edit/{Item.Id}";
+            string createItemEndpoint = $"{apiBaseUrl}/api/items/{Item.Id}";
 
             try
             {
+                var apiToken = HttpContextAccessor.HttpContext.Request.Cookies["OnebrbApiToken"];
                 Item.UserId = CurrentUserId;
 
                 var json = JsonSerializer.Serialize(Item);
-                var data = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiToken = HttpContextAccessor.HttpContext.Request.Cookies["OnebrbApiToken"];
+                var data = new StringContent(json, Encoding.UTF8, "application/json-patch+json");
 
                 HttpClient.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", apiToken);
 
-                var response = await HttpClient.PostAsync($"{createItemEndpoint}", data);
+                var response = await HttpClient.PatchAsync($"{createItemEndpoint}", data);
 
                 string responseJson = response.Content.ReadAsStringAsync().Result;
                 IsFormEnabled = false;
@@ -88,14 +88,14 @@ namespace Onebrb.MVC.Components.Items
 
                 IsItemCreated = true;
                 OnSubmitResult = $"The item was edited successfuly!";
-                EditBtnText = "Published";
+                EditBtnText = "Success";
                 EditedItemUrl = $"{mvcItemEndpoint}/{createdItem.Id}";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 notifyBarClass = $"{BootstrapCssConst.AlertDanger}";
                 OnSubmitResult = "Couldn't edit the item, please try again later...";
-                EditBtnText = "Publish";
+                EditBtnText = "Edit";
                 BtnSubmitCss = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess}";
             }
 
