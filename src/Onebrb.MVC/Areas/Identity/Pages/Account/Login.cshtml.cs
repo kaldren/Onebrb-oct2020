@@ -104,14 +104,6 @@ namespace Onebrb.MVC.Areas.Identity.Pages.Account
                         await _userManager.AddClaimAsync(user, userIdClaim);
                     }
 
-                    // Set security salt claim
-                    if (!this.User.Claims.Any(x => x.Value == "SecurityHash"))
-                    {
-                        var securitySaltClaim = new Claim("SecurityHash", user.SecurityHash);
-                        await _userManager.AddClaimAsync(user, securitySaltClaim);
-                    }
-
-
                     // Getting bearer token from Azure AD once we're successfully logged in
                     var tokenOptions = new ApiOptions();
                     _configuration.GetSection(ApiOptions.Token).Bind(tokenOptions);

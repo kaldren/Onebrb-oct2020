@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Onebrb.MVC.Constants;
 using Onebrb.MVC.Models.Item;
 using System;
@@ -18,15 +19,15 @@ namespace Onebrb.MVC.Components.Items
         [Parameter]
         public EditItemViewModel Item { get; set; }
 
-        [Parameter]
-        public string CurrentUserId { get; set; }
-
         // Dependency Injection
         [Inject]
         public HttpClient HttpClient { get; set; }
+
         [Inject]
         public IHttpContextAccessor HttpContextAccessor { get; set; }
 
+        [Inject]
+        UserManager<Core.Models.User> UserManager { get; set; }
 
         // Misc
         public bool IsFormEnabled { get; set; } = true;
@@ -37,9 +38,21 @@ namespace Onebrb.MVC.Components.Items
         public bool IsItemCreated { get; set; }
         public string EditBtnText { get; set; } = "Edit";
         public string BtnSubmitCss { get; set; } = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess}";
+        public Core.Models.User CurrentUser { get; set; }
 
         public EditItem()
         {
+            
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            CurrentUser = await UserManager.GetUserAsync(HttpContextAccessor.HttpContext.User);
+
+            if (CurrentUser.Id != Item.UserId)
+            {
+                return;
+            }
         }
 
         private async Task HandleValidSubmit()
@@ -68,7 +81,7 @@ namespace Onebrb.MVC.Components.Items
             try
             {
                 var apiToken = HttpContextAccessor.HttpContext.Request.Cookies["OnebrbApiToken"];
-                Item.UserId = CurrentUserId;
+                Item.UserId = CurrentUser.Id;
 
                 var json = JsonSerializer.Serialize(Item);
                 var data = new StringContent(json, Encoding.UTF8, "application/json-patch+json");

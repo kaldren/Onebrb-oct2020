@@ -130,7 +130,7 @@ namespace Onebrb.Api.Controllers
             Guard.Argument(itemId, nameof(itemId)).GreaterThan(0);
             Guard.Argument(model, nameof(model)).NotNull();
 
-
+            // Validate security hash provided in the request
             byte[] salt = Encoding.ASCII.GetBytes("app8cdf44fc-f815-4751-82a5-43751470a1c8salt");
 
             string securityHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -141,7 +141,7 @@ namespace Onebrb.Api.Controllers
                 numBytesRequested: 256 / 8));
 
 
-            // If the security hash is invalid it means it's tempered with, so we terminate the request
+            // If the security hash is invalid it means it's been tempered with, so we terminate the request
             if (securityHash != model.SecurityHash)
             {
                 return BadRequest();

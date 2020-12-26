@@ -9,6 +9,7 @@ using AutoMapper;
 using Dawn;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Onebrb.MVC.Config;
@@ -23,17 +24,21 @@ namespace Onebrb.MVC.Controllers
     public class ItemsController : Controller
     {
         private readonly IMapper _mapper;
+        private readonly UserManager<Onebrb.Core.Models.User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly ApiOptions _apiOptions;
 
         public ItemsController(
             IMapper mapper,
+            UserManager<Onebrb.Core.Models.User> userManager,
             IConfiguration configuration)
         {
             Guard.Argument(mapper, nameof(mapper)).NotNull();
+            Guard.Argument(userManager, nameof(userManager)).NotNull();
             Guard.Argument(configuration, nameof(configuration)).NotNull();
 
             _mapper = mapper;
+            _userManager = userManager;
             _configuration = configuration;
 
             // Api settings
@@ -126,8 +131,8 @@ namespace Onebrb.MVC.Controllers
         [Authorize]
         public async Task<ViewResult> Edit(int itemId)
         {
-            string currentUserId = this.User.Claims.SingleOrDefault(c => c.Type == "Id").Value;
-            string userSecurityHash = this.User.Claims.SingleOrDefault(c => c.Type == "SecurityHash").Value;
+            // Get current user
+            var currentUser = await this._userManager.GetUserAsync(this.User);
 
             using (var client = new OnebrbApi())
             {
@@ -138,13 +143,13 @@ namespace Onebrb.MVC.Controllers
 
                 EditItemViewModel editItemViewModel = this._mapper.Map<EditItemViewModel>(itemModel);
 
-                //// Only the product author is allowed to edit it
-                //if (editItemViewModel.UserId != currentUserId)
-                //{
-                //    return View("Errors/NotFound");
-                //}
+                // Only the product author is allowed to edit it
+                if (editItemViewModel.UserId != currentUser.Id)
+                {
+                    return View("Errors/Unauthorized");
+                }
 
-                editItemViewModel.SecurityHash = userSecurityHash;
+                editItemViewModel.SecurityHash = currentUser.SecurityHash;
 
                 return View(editItemViewModel);
             }

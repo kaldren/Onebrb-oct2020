@@ -20,7 +20,7 @@ namespace Onebrb.Data
 
         public DbSet<Item> Items { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Rating > Ratings { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         public async Task<Item> CreateItemAync(Item item)
         {
