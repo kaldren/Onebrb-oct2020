@@ -8,6 +8,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -81,22 +82,30 @@ namespace Onebrb.MVC.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                // Generate security salt for user
-                byte[] salt = new byte[128 / 8];
 
-                using (var rng = RandomNumberGenerator.Create())
-                {
-                    rng.GetBytes(salt);
-                }
-
-                string generaedSalt = Convert.ToBase64String(salt);
-
-                var user = new User { UserName = Input.UserName, Email = Input.Email, SecuritySalt = generaedSalt };
+                var user = new User { UserName = Input.UserName, Email = Input.Email };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    // Generate security hash using user id and app salt
+                    var createdUser = await _userManager.FindByNameAsync(user.UserName);
+
+                    // Salt using app's salt (should extract it as an option or KeyVault)
+                    byte[] salt = Encoding.ASCII.GetBytes("app8cdf44fc-f815-4751-82a5-43751470a1c8salt");
+
+                    string securityHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                        password: createdUser.Id,
+                        salt: salt,
+                        prf: KeyDerivationPrf.HMACSHA512,
+                        iterationCount: 10000,
+                        numBytesRequested: 256 / 8));
+
+                    createdUser.SecurityHash = securityHash;
+
+                    await _userManager.UpdateAsync(createdUser);
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

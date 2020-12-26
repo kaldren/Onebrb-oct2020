@@ -16,6 +16,8 @@ using System.Security.Claims;
 using Microsoft.Identity.Client;
 using Microsoft.Extensions.Configuration;
 using Onebrb.MVC.Config;
+using System.Text;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Onebrb.MVC.Areas.Identity.Pages.Account
 {
@@ -103,11 +105,12 @@ namespace Onebrb.MVC.Areas.Identity.Pages.Account
                     }
 
                     // Set security salt claim
-                    if (!this.User.Claims.Any(x => x.Value == "SecuritySalt"))
+                    if (!this.User.Claims.Any(x => x.Value == "SecurityHash"))
                     {
-                        var securitySaltClaim = new Claim("SecuritySalt", user.SecuritySalt);
+                        var securitySaltClaim = new Claim("SecurityHash", user.SecurityHash);
                         await _userManager.AddClaimAsync(user, securitySaltClaim);
                     }
+
 
                     // Getting bearer token from Azure AD once we're successfully logged in
                     var tokenOptions = new ApiOptions();

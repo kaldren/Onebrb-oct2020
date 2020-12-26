@@ -127,6 +127,7 @@ namespace Onebrb.MVC.Controllers
         public async Task<ViewResult> Edit(int itemId)
         {
             string currentUserId = this.User.Claims.FirstOrDefault(c => c.Type == "Id").Value;
+            string userSecurityHash = this.User.Claims.SingleOrDefault(c => c.Type == "SecurityHash").Value;
 
             using (var client = new OnebrbApi())
             {
@@ -137,19 +138,16 @@ namespace Onebrb.MVC.Controllers
 
                 EditItemViewModel editItemViewModel = this._mapper.Map<EditItemViewModel>(itemModel);
 
-                // Only the product author is allowed to edit it
-                if (editItemViewModel.UserId != currentUserId)
-                {
-                    return View("Errors/NotFound");
-                }
-
-                // generate a 128-bit salt using a secure PRNG
-                byte[] salt = Encoding.ASCII.GetBytes("somesalt");
+                //// Only the product author is allowed to edit it
+                //if (editItemViewModel.UserId != currentUserId)
+                //{
+                //    return View("Errors/NotFound");
+                //}
 
                 string securityHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                     password: currentUserId,
-                    salt: salt,
-                    prf: KeyDerivationPrf.HMACSHA1,
+                    salt: Encoding.ASCII.GetBytes(userSecurityHash),
+                    prf: KeyDerivationPrf.HMACSHA512,
                     iterationCount: 10000,
                     numBytesRequested: 256 / 8));
 

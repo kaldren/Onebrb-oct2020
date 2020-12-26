@@ -131,24 +131,22 @@ namespace Onebrb.Api.Controllers
             Guard.Argument(model, nameof(model)).NotNull();
 
 
-            // Generate a 128-bit salt using a secure PRNG
-            byte[] salt = Encoding.ASCII.GetBytes("somesalt");
+            byte[] salt = Encoding.ASCII.GetBytes("app8cdf44fc-f815-4751-82a5-43751470a1c8salt");
 
             string securityHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: model.UserId,
                 salt: salt,
-                prf: KeyDerivationPrf.HMACSHA1,
+                prf: KeyDerivationPrf.HMACSHA512,
                 iterationCount: 10000,
                 numBytesRequested: 256 / 8));
 
 
+            // If the security hash is invalid it means it's tempered with, so we terminate the request
             if (securityHash != model.SecurityHash)
             {
-                // Invalid security hash
                 return BadRequest();
             }
 
-            // Check if item exists
             ItemServiceModel item = await this._itemService.GetItemAsync(itemId);
 
             if (item == null)
@@ -156,7 +154,6 @@ namespace Onebrb.Api.Controllers
                 return NotFound();
             }
 
-            // Edit
             bool result = await this._itemService.Edit(model);
 
             if (!result)

@@ -9,6 +9,6 @@ namespace Onebrb.Core.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string SecuritySalt { get; set; }
+        public string SecurityHash { get; set; }
     }
 }
