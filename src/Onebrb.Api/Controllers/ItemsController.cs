@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -114,7 +115,7 @@ namespace Onebrb.Api.Controllers
 
             if (items == null)
             {
-                return NotFound(new BaseApiResponse<ItemServiceModel>
+                return NotFound(new BaseApiResponse<ICollection<ItemServiceModel>>
                 {
                     StatusCode = StatusCodes.Status404NotFound,
                     Message = ResponseMessages.NotFound,

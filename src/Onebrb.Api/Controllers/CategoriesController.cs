@@ -28,13 +28,12 @@ namespace Onebrb.Api.Controllers
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
 
-            if (categories == null)
+            if (categories.Count < 1)
             {
                 new BaseApiResponse<ICollection<CategoryServiceModel>>
                 {
                     StatusCode = StatusCodes.Status404NotFound,
                     Message = ResponseMessages.NotFound,
-                    Body = Enumerable.Empty<CategoryServiceModel>().ToList()
                 };
             }
 

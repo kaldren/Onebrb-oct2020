@@ -7,6 +7,7 @@ using Onebrb.Services.Models.Item;
 using Onebrb.Services.Items;
 using AutoMapper;
 using System;
+using System.Linq;
 
 namespace Onebrb.Services.Services
 {
@@ -25,9 +26,6 @@ namespace Onebrb.Services.Services
 
         public async Task<ItemServiceModel> CreateItemAsync(ItemServiceModel model)
         {
-            // TODO: Create Data service layer
-            //var item = _mapper.Map<ItemDataModel>(model);
-
             var item = _mapper.Map<Item>(model);
 
             var savedItem = await _onebrbContext.CreateItemAync(item);
@@ -53,7 +51,7 @@ namespace Onebrb.Services.Services
 
             if (items == null)
             {
-                return null;
+                return Enumerable.Empty<ItemServiceModel>().ToList();
             }
 
             return ObjectMapper.Mapper.Map<ICollection<ItemServiceModel>>(items);
