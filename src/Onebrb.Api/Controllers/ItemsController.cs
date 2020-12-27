@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Onebrb.Api.Constants;
 using Onebrb.Api.Helpers;
 using Onebrb.Api.Models;
+using Onebrb.Api.Security;
 using Onebrb.Core.Models;
 using Onebrb.Services;
 using Onebrb.Services.Items;
@@ -113,7 +114,7 @@ namespace Onebrb.Api.Controllers
 
             ICollection<ItemServiceModel> items = await _itemService.GetItemsAsync(username);
 
-            if (items == null)
+            if (items.Count < 1)
             {
                 return NotFound(new BaseApiResponse<ICollection<ItemServiceModel>>
                 {
@@ -144,18 +145,10 @@ namespace Onebrb.Api.Controllers
             Guard.Argument(model, nameof(model)).NotNull();
 
             // Validate security hash provided in the request
-            byte[] salt = Encoding.ASCII.GetBytes("app8cdf44fc-f815-4751-82a5-43751470a1c8salt");
-
-            string securityHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: model.UserId,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA512,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8));
-
+            bool isValidSecurityHash = SecurityHashValidator.IsValidSecurityHash(model.UserId, model.SecurityHash);
 
             // If the security hash is invalid it means it's been tempered with, so we terminate the request
-            if (securityHash != model.SecurityHash)
+            if (!isValidSecurityHash)
             {
                 return BadRequest(new BaseApiResponse<ItemServiceModel>
                 {
