@@ -1,11 +1,8 @@
-﻿using AutoMapper;
-using Onebrb.Core.Models;
-using Onebrb.Data;
+﻿using Onebrb.Data;
 using Onebrb.Services.Mapping;
 using Onebrb.Services.Models.Category;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Onebrb.Services.Categories
@@ -22,6 +19,11 @@ namespace Onebrb.Services.Categories
         public async Task<ICollection<CategoryServiceModel>> GetAllCategoriesAsync()
         {
             var categoriesDb = await _dbContext.GetAllCategories();
+
+            if (categoriesDb == null)
+            {
+                return Enumerable.Empty<CategoryServiceModel>().ToList();
+            }
 
             var categoriesReturned = ObjectMapper.Mapper.Map<ICollection<CategoryServiceModel>>(categoriesDb);
 
