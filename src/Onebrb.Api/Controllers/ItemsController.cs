@@ -53,13 +53,17 @@ namespace Onebrb.Api.Controllers
 
             if (item == null)
             {
-                return NotFound();
+                return NotFound(new BaseApiResponse<ItemServiceModel>
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = ResponseMessages.NotFound,
+                });
             }
 
             return Ok(new BaseApiResponse<ItemServiceModel>
             {
                 StatusCode = StatusCodes.Status200OK,
-                Message = "Returned item",
+                Message = ResponseMessages.SuccessfulOperation,
                 Body = item
             });
         }
@@ -81,13 +85,17 @@ namespace Onebrb.Api.Controllers
 
             if (item == null)
             {
-                return BadRequest();
+                return BadRequest(new BaseApiResponse<ItemServiceModel>
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ResponseMessages.BadRequest,
+                });
             }
 
             return Ok(new BaseApiResponse<ItemServiceModel>
             {
                 StatusCode = StatusCodes.Status200OK,
-                Message = "Created item",
+                Message = ResponseMessages.SuccessfulOperation,
                 Body = item
             });
         }
@@ -106,13 +114,17 @@ namespace Onebrb.Api.Controllers
 
             if (items == null)
             {
-                return NotFound();
+                return NotFound(new BaseApiResponse<ItemServiceModel>
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = ResponseMessages.NotFound,
+                });
             }
 
             return Ok(new BaseApiResponse<ICollection<ItemServiceModel>>
             {
                 StatusCode = StatusCodes.Status200OK,
-                Message = "List of items.",
+                Message = ResponseMessages.SuccessfulOperation,
                 Body = items
             });
         }
@@ -144,21 +156,29 @@ namespace Onebrb.Api.Controllers
             // If the security hash is invalid it means it's been tempered with, so we terminate the request
             if (securityHash != model.SecurityHash)
             {
-                return BadRequest();
+                return BadRequest(new BaseApiResponse<ItemServiceModel>
+                {
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    Message = ResponseMessages.BadRequest,
+                });
             }
 
             ItemServiceModel item = await this._itemService.GetItemAsync(itemId);
 
             if (item == null)
             {
-                return NotFound();
+                return NotFound(new BaseApiResponse<ItemServiceModel>
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = ResponseMessages.NotFound,
+                });
             }
 
             bool result = await this._itemService.Edit(model);
 
             if (!result)
             {
-                return StatusCode(500);
+                return Problem(ResponseMessages.ServerError, null, 500);
             }
 
             item = await this._itemService.GetItemAsync(itemId);
@@ -166,7 +186,7 @@ namespace Onebrb.Api.Controllers
             return Ok(new BaseApiResponse<ItemServiceModel>
             {
                 StatusCode = StatusCodes.Status200OK,
-                Message = "Edited item",
+                Message = ResponseMessages.SuccessfulOperation,
                 Body = item
             });
         }
@@ -190,13 +210,21 @@ namespace Onebrb.Api.Controllers
 
             if (item == null)
             {
-                return NotFound();
+                return NotFound(new BaseApiResponse<ItemServiceModel>
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = ResponseMessages.NotFound,
+                });
             }
 
             // Check if the item is hes/hers to delete
             if (item.UserId != currentUser.Id)
             {
-                return Unauthorized();
+                return Unauthorized(new BaseApiResponse<ItemServiceModel>
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized,
+                    Message = ResponseMessages.Unauthorized,
+                });
             }
 
             // Delete
@@ -208,7 +236,7 @@ namespace Onebrb.Api.Controllers
 
             if (!result)
             {
-                return StatusCode(500);
+                return Problem(ResponseMessages.ServerError, null, 500);
             }
 
             return Ok(new BaseApiResponse<ItemServiceModel>
