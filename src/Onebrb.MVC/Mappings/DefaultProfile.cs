@@ -9,7 +9,8 @@ namespace Onebrb.MVC.Mappings
         public DefaultProfile()
         {
             CreateMap<ItemServiceModel, ItemViewModel>();
-            CreateMap<ItemServiceModel, EditItemViewModel>();
+            CreateMap<ItemServiceModel, EditItemViewModel>()
+                .ForMember(m => m.ItemId, opt => opt.MapFrom(m => m.Id));
             CreateMap<CreateItemRequestModel, ItemServiceModel>();
         }
     }

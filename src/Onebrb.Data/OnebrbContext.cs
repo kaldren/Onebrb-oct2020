@@ -35,6 +35,7 @@ namespace Onebrb.Data
             return await this.Items
                 .Include(x => x.Ratings)
                 .Include(x => x.User)
+                .Include(x => x.Category)
                 .SingleOrDefaultAsync(x => x.Id == itemId);
         }
 

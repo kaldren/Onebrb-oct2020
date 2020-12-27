@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Onebrb.MVC.Config;
-using Onebrb.MVC.Helpers;
+using Onebrb.MVC.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

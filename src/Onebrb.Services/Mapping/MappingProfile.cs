@@ -11,8 +11,9 @@ namespace Onebrb.Services
         {
             // Item
             CreateMap<Item, ItemServiceModel>();
-
             CreateMap<ItemServiceModel, Item>();
+
+            CreateMap<EditItemRequestModel, Item>();
 
             // Category
             CreateMap<Category, CategoryServiceModel>();

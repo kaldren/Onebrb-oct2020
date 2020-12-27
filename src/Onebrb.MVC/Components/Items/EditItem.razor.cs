@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Onebrb.MVC.Constants;
+using Onebrb.MVC.Models;
 using Onebrb.MVC.Models.Item;
 using System;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace Onebrb.MVC.Components.Items
         public string notifyBarClass { get; set; }
         public string OnebrbApiToken { get; set; }
         public string EditedItemUrl { get; set; }
-        public bool IsItemCreated { get; set; }
+        public bool IsItemEdited { get; set; }
         public string EditBtnText { get; set; } = "Edit";
         public string BtnSubmitCss { get; set; } = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess}";
         public Core.Models.User CurrentUser { get; set; }
@@ -76,7 +77,7 @@ namespace Onebrb.MVC.Components.Items
             string mvcItemEndpoint = $"{mvcBaseUrl}/items";
 
             string apiBaseUrl = "https://localhost:44307";
-            string createItemEndpoint = $"{apiBaseUrl}/api/items/{Item.Id}";
+            string createItemEndpoint = $"{apiBaseUrl}/api/items/{Item.ItemId}";
 
             try
             {
@@ -94,15 +95,15 @@ namespace Onebrb.MVC.Components.Items
                 string responseJson = response.Content.ReadAsStringAsync().Result;
                 IsFormEnabled = false;
                 notifyBarClass = BootstrapCssConst.AlertSuccess;
-                var createdItem = JsonSerializer.Deserialize<CreateItemResponseModel>(responseJson, new JsonSerializerOptions
+                var editItem = JsonSerializer.Deserialize<BaseApiResponse<EditItemResponseModel>>(responseJson, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 });
 
-                IsItemCreated = true;
+                IsItemEdited = true;
                 OnSubmitResult = $"The item was edited successfuly!";
                 EditBtnText = "Success";
-                EditedItemUrl = $"{mvcItemEndpoint}/{createdItem.Id}";
+                EditedItemUrl = $"{mvcItemEndpoint}/{editItem.Body.Id}";
             }
             catch (Exception ex)
             {

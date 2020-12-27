@@ -8,7 +8,7 @@ namespace Onebrb.MVC.Models.Item
 {
     public class EditItemViewModel
     {
-        public long Id { get; set; }
+        public long ItemId { get; set; }
         public decimal? Price { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

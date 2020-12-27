@@ -1,4 +1,4 @@
-﻿using Onebrb.MVC.Helpers;
+﻿using Onebrb.MVC.Models;
 using System.Threading.Tasks;
 
 namespace Onebrb.MVC.Services

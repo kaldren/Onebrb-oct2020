@@ -60,12 +60,14 @@ namespace Onebrb.Services.Services
         {
             var item = await this._onebrbContext.GetItemAsync(model.ItemId);
 
-            if (item == null || item.UserId != model.UserId)
+            if (item?.UserId != model.UserId)
             {
                 return false;
             }
 
-            item = ObjectMapper.Mapper.Map<Item>(model);
+            item.Price = model.Price;
+            item.Description = model.Description;
+            item.Title = model.Title;
 
             return await this._onebrbContext.EditAsync(item);
         }

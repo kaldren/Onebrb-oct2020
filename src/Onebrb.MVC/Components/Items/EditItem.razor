@@ -3,7 +3,7 @@
 <p>Edit @Item.Title</p>
 <p class="@notifyBarClass">@OnSubmitResult</p>
 
-@if (IsItemCreated)
+@if (IsItemEdited)
 {
     <div>
         <ButtonLinkComponent Url="@EditedItemUrl" Text="Click here to view the item" Css="btn btn-primary view-created-item" />
