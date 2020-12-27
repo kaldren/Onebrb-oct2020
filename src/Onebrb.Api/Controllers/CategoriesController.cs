@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Onebrb.Api.Constants;
 using Onebrb.Api.Helpers;
 using Onebrb.Core.Models;
 using Onebrb.Services.Categories;
@@ -31,8 +32,8 @@ namespace Onebrb.Api.Controllers
             {
                 new BaseApiResponse<ICollection<CategoryServiceModel>>
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Message = "Couldn't fetch categories.",
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Message = ResponseMessages.NotFound,
                     Body = Enumerable.Empty<CategoryServiceModel>().ToList()
                 };
             }
@@ -40,7 +41,7 @@ namespace Onebrb.Api.Controllers
             return new BaseApiResponse<ICollection<CategoryServiceModel>>
             {
                 StatusCode = StatusCodes.Status200OK,
-                Message = "List of categories",
+                Message = ResponseMessages.SuccessfulOperation,
                 Body = categories
             };
         }
