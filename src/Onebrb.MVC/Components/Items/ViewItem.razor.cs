@@ -16,6 +16,8 @@ namespace Onebrb.MVC.Components.Items
 
         // Misc
         public string BtnLikeCss { get; set; } = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess}";
+        public string BtnDeleteCss { get; set; } = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnDanger}";
+        public string BtnEditCss { get; set; } = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnInfo}";
         public bool IsLikeBtnEnabled { get; set; }
     }
 }

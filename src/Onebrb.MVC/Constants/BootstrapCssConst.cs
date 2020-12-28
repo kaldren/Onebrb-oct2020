@@ -18,5 +18,7 @@ namespace Onebrb.MVC.Constants
         // Buttons
         public const string Btn = "btn";
         public const string BtnSuccess = "btn-success";
+        public const string BtnDanger = "btn-danger";
+        public const string BtnInfo = "btn-info";
     }
 }

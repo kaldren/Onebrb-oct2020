@@ -1,6 +1,14 @@
 ﻿    <div class="card mb-4 box-shadow item-box">
         <div class="card-header">
             <h4 class="my-0 font-weight-normal">@Item.Title</h4>
+            <div class="card-header__options">
+                <button type="submit" class="@BtnEditCss" disabled="@(IsLikeBtnEnabled)">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                </button>
+                <button type="submit" class="@BtnDeleteCss" disabled="@(IsLikeBtnEnabled)">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+            </div>
         </div>
         <div class="card-body">
             <h1 class="card-title pricing-card-title">@(Item.Price != null ? Item.Price.Value.ToString("C") : "N/A")</h1>

@@ -82,11 +82,23 @@ body {
 /*#endregion Create item*/
 
 /*#region View item*/
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 .item-box__likes {
     display: flex;
     justify-content: flex-end;
     flex-direction: column;
     align-items: flex-end;
     flex-wrap: wrap;
+}
+.card-header__options {
+/*    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-wrap: wrap;*/
 }
 /*#endregion View item*/
