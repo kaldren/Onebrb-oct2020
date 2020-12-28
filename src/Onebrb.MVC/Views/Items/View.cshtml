@@ -1,39 +1,7 @@
-﻿@using Onebrb.MVC.Components.Items
-@model Onebrb.MVC.Models.Item.ItemViewModel
-@*<component type="typeof(Onebrb.MVC.Components.Items.ViewItem)" param-Item="Model" render-mode="ServerPrerendered" />*@
-
-@*<div id="item-profile">
-    <p>@Model.Title</p>
-    <p>@Model.Price</p>
-    <p>@Model.Description</p>
-
-    <p>Rating: (+) @Model.Ratings.Where(x => x.Value > 0).Count() | (-) @Model.Ratings.Where(x => x.Value < 0).Count()</p>
-
-    <div class="item-comments">
-        Comments widget
-    </div>
-</div>*@
-
-<div class="card mb-4 box-shadow item-box">
-    <div class="card-header">
-        <h4 class="my-0 font-weight-normal">@Model.Title</h4>
-    </div>
-    <div class="card-body">
-        <h1 class="card-title pricing-card-title">@(Model.Price != null ? Model.Price.Value.ToString("C") : "N/A")</h1>
-        <div class="item-box__category">
-            <h6>@Model.CategoryName</h6>
-        </div>
-        <div class="item-box__likes">
-            <h6>@Model.Ratings.Where(x => x.Value > 0).Count() likes.</h6>
-        </div>
-        <p>
-            @Model.Description
-        </p>
-        <button type="button" class="btn btn-lg btn-block btn-outline-primary">Contact seller</button>
-    </div>
-</div>
-
-@{
+﻿@model Onebrb.MVC.Models.Item.ItemViewModel
+@if (User.Identity.IsAuthenticated)
+{
+    <component type="typeof(Onebrb.MVC.Components.Items.ViewItem)" param-Item="Model" render-mode="ServerPrerendered" />
 }
 
 @section Scripts {

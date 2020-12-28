@@ -1,17 +1,21 @@
-﻿@using Onebrb.MVC.Models.Item
- 
-
-    <div id="item-profile">
-        <p>@Item.Title</p>
-
-        <p>Rating: @Item.Ratings.Where(x => x.Value > 0).Count() | @Item.Ratings.Where(x => x.Value > 0).Count()</p>
-
-        <div class="item-comments">
-            Comments widget
+﻿    <div class="card mb-4 box-shadow item-box">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">@Item.Title</h4>
+        </div>
+        <div class="card-body">
+            <h1 class="card-title pricing-card-title">@(Item.Price != null ? Item.Price.Value.ToString("C") : "N/A")</h1>
+            <div class="item-box__category">
+                <h6>@Item.CategoryName</h6>
+            </div>
+            <div class="item-box__likes">
+                <h6>@Item.Ratings.Where(x => x.Value > 0).Count() likes.</h6>
+                <button type="submit" class="@BtnLikeCss" disabled="@(IsLikeBtnEnabled)"><i class="fas fa-thumbs-up"></i></button>
+            </div>
+            <p>
+                @Item.Description
+            </p>
+            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Contact seller</button>
         </div>
     </div>
-
 @code {
-    [Parameter]
-    public ItemViewModel Item { get; set; }
 }

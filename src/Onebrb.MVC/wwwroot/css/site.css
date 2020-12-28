@@ -84,5 +84,9 @@ body {
 /*#region View item*/
 .item-box__likes {
     display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-wrap: wrap;
 }
 /*#endregion View item*/
