@@ -62,9 +62,11 @@ namespace OnebrbApiClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> EditItemWithHttpMessagesAsync(int itemId, EditItemModel body = default(EditItemModel), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> EditItemWithHttpMessagesAsync(int itemId, EditItemRequestModel body = default(EditItemRequestModel), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='itemId'>
+        /// </param>
+        /// <param name='body'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -72,7 +74,7 @@ namespace OnebrbApiClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> DeleteWithHttpMessagesAsync(int itemId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> DeleteItemWithHttpMessagesAsync(int itemId, EditItemRequestModel body = default(EditItemRequestModel), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='body'>
         /// </param>

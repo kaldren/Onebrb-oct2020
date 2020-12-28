@@ -24,15 +24,18 @@ namespace OnebrbApiClient.Models
         /// <summary>
         /// Initializes a new instance of the ItemServiceModel class.
         /// </summary>
-        public ItemServiceModel(int? id = default(int?), string title = default(string), string description = default(string), double? price = default(double?), int? categoryId = default(int?), string userId = default(string), User user = default(User), IList<Rating> ratings = default(IList<Rating>))
+        public ItemServiceModel(int? id = default(int?), string title = default(string), string description = default(string), double? price = default(double?), int? categoryId = default(int?), string categoryName = default(string), string userId = default(string), string userFirstName = default(string), string userLastName = default(string), string userEmail = default(string), IList<Rating> ratings = default(IList<Rating>))
         {
             Id = id;
             Title = title;
             Description = description;
             Price = price;
             CategoryId = categoryId;
+            CategoryName = categoryName;
             UserId = userId;
-            User = user;
+            UserFirstName = userFirstName;
+            UserLastName = userLastName;
+            UserEmail = userEmail;
             Ratings = ratings;
             CustomInit();
         }
@@ -69,13 +72,28 @@ namespace OnebrbApiClient.Models
 
         /// <summary>
         /// </summary>
+        [JsonProperty(PropertyName = "categoryName")]
+        public string CategoryName { get; set; }
+
+        /// <summary>
+        /// </summary>
         [JsonProperty(PropertyName = "userId")]
         public string UserId { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "user")]
-        public User User { get; set; }
+        [JsonProperty(PropertyName = "userFirstName")]
+        public string UserFirstName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "userLastName")]
+        public string UserLastName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "userEmail")]
+        public string UserEmail { get; set; }
 
         /// <summary>
         /// </summary>

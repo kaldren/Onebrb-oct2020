@@ -70,7 +70,7 @@ namespace OnebrbApiClient
             /// </param>
             /// <param name='body'>
             /// </param>
-            public static void EditItem(this IOnebrbApi operations, int itemId, EditItemModel body = default(EditItemModel))
+            public static void EditItem(this IOnebrbApi operations, int itemId, EditItemRequestModel body = default(EditItemRequestModel))
             {
                 operations.EditItemAsync(itemId, body).GetAwaiter().GetResult();
             }
@@ -85,7 +85,7 @@ namespace OnebrbApiClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task EditItemAsync(this IOnebrbApi operations, int itemId, EditItemModel body = default(EditItemModel), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task EditItemAsync(this IOnebrbApi operations, int itemId, EditItemRequestModel body = default(EditItemRequestModel), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.EditItemWithHttpMessagesAsync(itemId, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -95,9 +95,11 @@ namespace OnebrbApiClient
             /// </param>
             /// <param name='itemId'>
             /// </param>
-            public static void Delete(this IOnebrbApi operations, int itemId)
+            /// <param name='body'>
+            /// </param>
+            public static void DeleteItem(this IOnebrbApi operations, int itemId, EditItemRequestModel body = default(EditItemRequestModel))
             {
-                operations.DeleteAsync(itemId).GetAwaiter().GetResult();
+                operations.DeleteItemAsync(itemId, body).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -105,12 +107,14 @@ namespace OnebrbApiClient
             /// </param>
             /// <param name='itemId'>
             /// </param>
+            /// <param name='body'>
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteAsync(this IOnebrbApi operations, int itemId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteItemAsync(this IOnebrbApi operations, int itemId, EditItemRequestModel body = default(EditItemRequestModel), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.DeleteWithHttpMessagesAsync(itemId, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.DeleteItemWithHttpMessagesAsync(itemId, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <param name='operations'>

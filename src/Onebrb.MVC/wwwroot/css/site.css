@@ -80,3 +80,9 @@ body {
     max-width: 300px;
 }
 /*#endregion Create item*/
+
+/*#region View item*/
+.item-box__likes {
+    display: flex;
+}
+/*#endregion View item*/

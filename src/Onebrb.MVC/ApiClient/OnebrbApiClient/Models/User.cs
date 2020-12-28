@@ -22,10 +22,11 @@ namespace OnebrbApiClient.Models
         /// <summary>
         /// Initializes a new instance of the User class.
         /// </summary>
-        public User(string firstName = default(string), string lastName = default(string), string id = default(string), string userName = default(string), string normalizedUserName = default(string), string email = default(string), string normalizedEmail = default(string), bool? emailConfirmed = default(bool?), string passwordHash = default(string), string securityStamp = default(string), string concurrencyStamp = default(string), string phoneNumber = default(string), bool? phoneNumberConfirmed = default(bool?), bool? twoFactorEnabled = default(bool?), System.DateTime? lockoutEnd = default(System.DateTime?), bool? lockoutEnabled = default(bool?), int? accessFailedCount = default(int?))
+        public User(string firstName = default(string), string lastName = default(string), string securityHash = default(string), string id = default(string), string userName = default(string), string normalizedUserName = default(string), string email = default(string), string normalizedEmail = default(string), bool? emailConfirmed = default(bool?), string passwordHash = default(string), string securityStamp = default(string), string concurrencyStamp = default(string), string phoneNumber = default(string), bool? phoneNumberConfirmed = default(bool?), bool? twoFactorEnabled = default(bool?), System.DateTime? lockoutEnd = default(System.DateTime?), bool? lockoutEnabled = default(bool?), int? accessFailedCount = default(int?))
         {
             FirstName = firstName;
             LastName = lastName;
+            SecurityHash = securityHash;
             Id = id;
             UserName = userName;
             NormalizedUserName = normalizedUserName;
@@ -58,6 +59,11 @@ namespace OnebrbApiClient.Models
         /// </summary>
         [JsonProperty(PropertyName = "lastName")]
         public string LastName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "securityHash")]
+        public string SecurityHash { get; set; }
 
         /// <summary>
         /// </summary>

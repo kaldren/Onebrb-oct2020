@@ -13,6 +13,8 @@ namespace Onebrb.MVC.Models.Item
         public string Title { get; set; }
         public string Description { get; set; }
         public string UserId { get; set; }
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
         public ICollection<Rating> Ratings { get; set; }
     }
 }

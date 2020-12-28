@@ -9,26 +9,27 @@ namespace OnebrbApiClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class EditItemModel
+    public partial class EditItemRequestModel
     {
         /// <summary>
-        /// Initializes a new instance of the EditItemModel class.
+        /// Initializes a new instance of the EditItemRequestModel class.
         /// </summary>
-        public EditItemModel()
+        public EditItemRequestModel()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the EditItemModel class.
+        /// Initializes a new instance of the EditItemRequestModel class.
         /// </summary>
-        public EditItemModel(double? price = default(double?), string title = default(string), string description = default(string), int? itemId = default(int?), string userId = default(string))
+        public EditItemRequestModel(double? price = default(double?), string title = default(string), string description = default(string), int? itemId = default(int?), string userId = default(string), string securityHash = default(string))
         {
             Price = price;
             Title = title;
             Description = description;
             ItemId = itemId;
             UserId = userId;
+            SecurityHash = securityHash;
             CustomInit();
         }
 
@@ -61,6 +62,11 @@ namespace OnebrbApiClient.Models
         /// </summary>
         [JsonProperty(PropertyName = "userId")]
         public string UserId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "securityHash")]
+        public string SecurityHash { get; set; }
 
     }
 }

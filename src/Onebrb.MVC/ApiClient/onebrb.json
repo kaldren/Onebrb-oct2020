@@ -78,7 +78,7 @@
             "in": "body",
             "name": "body",
             "schema": {
-              "$ref": "#/definitions/EditItemModel"
+              "$ref": "#/definitions/EditItemRequestModel"
             }
           }
         ],
@@ -92,7 +92,13 @@
         "tags": [
           "Items"
         ],
-        "operationId": "Delete",
+        "operationId": "DeleteItem",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
         "parameters": [
           {
             "in": "path",
@@ -100,6 +106,13 @@
             "required": true,
             "type": "integer",
             "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/EditItemRequestModel"
+            }
           }
         ],
         "responses": {
@@ -206,6 +219,24 @@
         }
       }
     },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Item"
+          }
+        }
+      }
+    },
     "User": {
       "type": "object",
       "properties": {
@@ -213,6 +244,9 @@
           "type": "string"
         },
         "lastName": {
+          "type": "string"
+        },
+        "securityHash": {
           "type": "string"
         },
         "id": {
@@ -261,24 +295,6 @@
         "accessFailedCount": {
           "format": "int32",
           "type": "integer"
-        }
-      }
-    },
-    "Category": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "format": "int32",
-          "type": "integer"
-        },
-        "name": {
-          "type": "string"
-        },
-        "items": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Item"
-          }
         }
       }
     },
@@ -367,11 +383,20 @@
           "format": "int32",
           "type": "integer"
         },
+        "categoryName": {
+          "type": "string"
+        },
         "userId": {
           "type": "string"
         },
-        "user": {
-          "$ref": "#/definitions/User"
+        "userFirstName": {
+          "type": "string"
+        },
+        "userLastName": {
+          "type": "string"
+        },
+        "userEmail": {
+          "type": "string"
         },
         "ratings": {
           "type": "array",
@@ -396,7 +421,7 @@
         }
       }
     },
-    "EditItemModel": {
+    "EditItemRequestModel": {
       "type": "object",
       "properties": {
         "price": {
@@ -414,6 +439,9 @@
           "type": "integer"
         },
         "userId": {
+          "type": "string"
+        },
+        "securityHash": {
           "type": "string"
         }
       }
