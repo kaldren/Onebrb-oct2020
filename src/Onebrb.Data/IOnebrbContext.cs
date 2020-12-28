@@ -15,5 +15,8 @@ namespace Onebrb.Data
 
         // Categories
         Task<ICollection<Category>> GetAllCategories();
+
+        // Ratings
+        Task<Rating> RateItemAsync(int itemId, string userId);
     }
 }

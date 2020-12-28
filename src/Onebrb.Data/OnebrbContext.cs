@@ -87,5 +87,20 @@ namespace Onebrb.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ItemConfiguration());
         }
+
+        public async Task<Rating> RateItemAsync(int itemId, string userId)
+        {
+            this.Ratings.Add(new Rating
+            {
+                ItemId = itemId,
+                UserId = userId,
+                Value = 1
+            });
+
+            await this.SaveChangesAsync();
+
+            return await this.Ratings
+                        .SingleOrDefaultAsync(x => x.ItemId == itemId && x.UserId == userId);
+        }
     }
 }

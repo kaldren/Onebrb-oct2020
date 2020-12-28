@@ -14,8 +14,8 @@ namespace Onebrb.MVC.Components.Items
         [Parameter]
         public ItemViewModel Item { get; set; }
 
+        // Misc
         public string BtnLikeCss { get; set; } = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess}";
         public bool IsLikeBtnEnabled { get; set; }
-        public string LikeBtnText { get; set; } = "Like";
     }
 }
