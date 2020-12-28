@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using Onebrb.MVC.Constants;
+using Onebrb.MVC.Models;
 using Onebrb.MVC.Models.Item;
 using System;
 using System.Linq;
@@ -91,7 +92,7 @@ namespace Onebrb.MVC.Components.Items
                 string responseJson = response.Content.ReadAsStringAsync().Result;
                 IsFormEnabled = false;
                 notifyBarClass = BootstrapCssConst.AlertSuccess;
-                var createdItem = JsonSerializer.Deserialize<CreateItemResponseModel>(responseJson, new JsonSerializerOptions
+                var createdItem = JsonSerializer.Deserialize<BaseApiResponse<CreateItemResponseModel>>(responseJson, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 });
@@ -99,7 +100,7 @@ namespace Onebrb.MVC.Components.Items
                 IsItemCreated = true;
                 OnSubmitResult = $"The item was published successfuly!";
                 PublishBtnText = "Published";
-                CreatedItemUrl = $"{mvcItemEndpoint}/{createdItem.Id}";
+                CreatedItemUrl = $"{mvcItemEndpoint}/{createdItem.Body.Id}";
             }
             catch (Exception)
             {

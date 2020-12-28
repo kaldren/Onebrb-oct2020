@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Dawn;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Onebrb.Api.Constants;
 using Onebrb.Api.Helpers;
-using Onebrb.Api.Models;
+using Onebrb.Api.Models.Item;
 using Onebrb.Api.Security;
 using Onebrb.Core.Models;
 using Onebrb.Services;
 using Onebrb.Services.Items;
 using Onebrb.Services.Models.Item;
-using Onebrb.Services.Services;
 
 namespace Onebrb.Api.Controllers
 {
@@ -168,7 +161,9 @@ namespace Onebrb.Api.Controllers
                 });
             }
 
-            bool result = await this._itemService.Edit(model);
+            var editItemServiceModel = this._mapper.Map<EditItemServiceModel>(model);
+
+            bool result = await this._itemService.Edit(editItemServiceModel);
 
             if (!result)
             {
@@ -192,7 +187,7 @@ namespace Onebrb.Api.Controllers
         /// <returns>The deleted item</returns>
         [HttpDelete("{itemId:int}")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> DeleteItem(int itemId)
+        public async Task<IActionResult> DeleteItem(int itemId, [FromBody] EditItemRequestModel model)
         {
             Guard.Argument(itemId, nameof(itemId)).GreaterThan(0);
 
@@ -222,7 +217,7 @@ namespace Onebrb.Api.Controllers
             }
 
             // Delete
-            bool result = await this._itemService.Delete(new DeleteItemModel
+            bool result = await this._itemService.Delete(new DeleteItemServiceModel
             {
                 ItemId = itemId,
                 UserId = currentUser.Id

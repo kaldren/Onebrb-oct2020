@@ -1,7 +1,9 @@
-﻿using Onebrb.Services.Models;
-using System.Security.Claims;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Onebrb.Services.Services
+namespace Onebrb.Api.Models.Item
 {
     public class EditItemRequestModel : BaseModel
     {

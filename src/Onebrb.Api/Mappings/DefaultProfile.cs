@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Onebrb.Api.Models;
+using Onebrb.Api.Models.Item;
 using Onebrb.Core.Models;
 using Onebrb.Services;
+using Onebrb.Services.Models.Item;
 
 namespace Onebrb.Api.Mappings
 {
@@ -15,6 +17,7 @@ namespace Onebrb.Api.Mappings
 
             // Item
             CreateMap<ItemRequestModel, ItemServiceModel>();
+            CreateMap<EditItemRequestModel, EditItemServiceModel>();
         }
     }
 }

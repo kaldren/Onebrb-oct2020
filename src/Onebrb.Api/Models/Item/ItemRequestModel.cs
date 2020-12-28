@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Onebrb.Api.Models
+namespace Onebrb.Api.Models.Item
 {
     public class ItemRequestModel
     {
