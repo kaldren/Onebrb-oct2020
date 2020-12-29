@@ -80,7 +80,7 @@ namespace Onebrb.Api.Controllers
 
             if (item == null)
             {
-                return BadRequest(new BaseApiResponse<ItemServiceModel>
+                return Ok(new BaseApiResponse<ItemServiceModel>
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Message = ResponseMessages.BadRequest,
@@ -109,7 +109,7 @@ namespace Onebrb.Api.Controllers
 
             if (items.Count < 1)
             {
-                return NotFound(new BaseApiResponse<ICollection<ItemServiceModel>>
+                return Ok(new BaseApiResponse<ICollection<ItemServiceModel>>
                 {
                     StatusCode = StatusCodes.Status404NotFound,
                     Message = ResponseMessages.NotFound,
@@ -154,7 +154,7 @@ namespace Onebrb.Api.Controllers
 
             if (item == null)
             {
-                return NotFound(new BaseApiResponse<ItemServiceModel>
+                return Ok(new BaseApiResponse<ItemServiceModel>
                 {
                     StatusCode = StatusCodes.Status404NotFound,
                     Message = ResponseMessages.NotFound,
@@ -167,7 +167,11 @@ namespace Onebrb.Api.Controllers
 
             if (!result)
             {
-                return Problem(ResponseMessages.ServerError, null, 500);
+                return Ok(new BaseApiResponse<ItemServiceModel>
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError,
+                    Message = ResponseMessages.ServerError,
+                });
             }
 
             item = await this._itemService.GetItemAsync(itemId);
@@ -197,7 +201,7 @@ namespace Onebrb.Api.Controllers
             // If the security hash is invalid it means it's been tempered with, so we terminate the request
             if (!isValidSecurityHash)
             {
-                return Unauthorized(new BaseApiResponse<ItemServiceModel>
+                return Ok(new BaseApiResponse<ItemServiceModel>
                 {
                     StatusCode = StatusCodes.Status401Unauthorized,
                     Message = ResponseMessages.Unauthorized,
@@ -209,7 +213,7 @@ namespace Onebrb.Api.Controllers
 
             if (item == null)
             {
-                return NotFound(new BaseApiResponse<ItemServiceModel>
+                return Ok(new BaseApiResponse<ItemServiceModel>
                 {
                     StatusCode = StatusCodes.Status404NotFound,
                     Message = ResponseMessages.NotFound,

@@ -43,11 +43,11 @@ namespace Onebrb.MVC.Components.Items
 
         // Misc
         public bool IsFormEnabled { get; set; } = true;
-        public string OnSubmitResult { get; set; }
+        public string OnDeleteResult { get; set; }
         public string notifyBarClass { get; set; }
         public string OnebrbApiToken { get; set; }
         public string EditedItemUrl { get; set; }
-        public bool IsItemEdited { get; set; }
+        public bool IsItemDeleted { get; set; }
         public string BtnSubmitCss { get; set; } = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess}";
 
         protected override async Task OnInitializedAsync()
@@ -97,13 +97,13 @@ namespace Onebrb.MVC.Components.Items
                     PropertyNameCaseInsensitive = true,
                 });
 
-                IsItemEdited = true;
-                OnSubmitResult = $"The item was deleted successfuly!";
+                IsItemDeleted = true;
+                OnDeleteResult = $"The item was deleted successfuly!";
             }
             catch (Exception ex)
             {
                 notifyBarClass = $"{BootstrapCssConst.AlertDanger}";
-                OnSubmitResult = "Couldn't edit the item, please try again later...";
+                OnDeleteResult = "Couldn't edit the item, please try again later...";
                 BtnSubmitCss = $"{BootstrapCssConst.Btn} {BootstrapCssConst.BtnSuccess}";
             }
         }
