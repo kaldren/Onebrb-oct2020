@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Onebrb.MVC.Models.Category;
 using Onebrb.MVC.Models.Item;
+using Onebrb.MVC.Models.Rating;
 using OnebrbApiClient.Models;
 
 namespace Onebrb.MVC.Mappings
@@ -15,6 +16,8 @@ namespace Onebrb.MVC.Mappings
             CreateMap<CreateItemRequestModel, ItemServiceModel>();
 
             CreateMap<CategoryServiceModel, CategoryModel>();
+
+            CreateMap<Rating, RatingModel>();
         }
     }
 }

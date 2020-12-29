@@ -1,4 +1,5 @@
 ﻿using Onebrb.Core.Models;
+using Onebrb.MVC.Models.Rating;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,6 @@ namespace Onebrb.MVC.Models.Item
         public string UserId { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public ICollection<Rating> Ratings { get; set; }
+        public ICollection<RatingModel> Ratings { get; set; }
     }
 }

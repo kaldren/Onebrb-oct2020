@@ -187,12 +187,22 @@ namespace Onebrb.Api.Controllers
         /// <returns>The deleted item</returns>
         [HttpDelete("{itemId:int}")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IActionResult> DeleteItem(int itemId, [FromBody] EditItemRequestModel model)
+        public async Task<IActionResult> DeleteItem(int itemId, [FromQuery]string userId, [FromQuery] string securityHash)
         {
             Guard.Argument(itemId, nameof(itemId)).GreaterThan(0);
 
-            // Check who the current user requesting deletion is
-            User currentUser = await this._userManager.GetUserAsync(this.User);
+            // Validate security hash provided in the request
+            bool isValidSecurityHash = SecurityHashValidator.IsValidSecurityHash(userId, securityHash);
+
+            // If the security hash is invalid it means it's been tempered with, so we terminate the request
+            if (!isValidSecurityHash)
+            {
+                return Unauthorized(new BaseApiResponse<ItemServiceModel>
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized,
+                    Message = ResponseMessages.Unauthorized,
+                });
+            }
 
             // Check if item exists
             ItemServiceModel item = await this._itemService.GetItemAsync(itemId);
@@ -206,21 +216,11 @@ namespace Onebrb.Api.Controllers
                 });
             }
 
-            // Check if the item is hes/hers to delete
-            if (item.UserId != currentUser.Id)
-            {
-                return Unauthorized(new BaseApiResponse<ItemServiceModel>
-                {
-                    StatusCode = StatusCodes.Status401Unauthorized,
-                    Message = ResponseMessages.Unauthorized,
-                });
-            }
-
             // Delete
             bool result = await this._itemService.Delete(new DeleteItemServiceModel
             {
                 ItemId = itemId,
-                UserId = currentUser.Id
+                UserId = userId,
             });
 
             if (!result)
@@ -231,7 +231,7 @@ namespace Onebrb.Api.Controllers
             return Ok(new BaseApiResponse<ItemServiceModel>
             {
                 StatusCode = StatusCodes.Status200OK,
-                Message = "Item deleted successfuly.",
+                Message = ResponseMessages.SuccessfulOperation,
                 Body = item
             });
         }

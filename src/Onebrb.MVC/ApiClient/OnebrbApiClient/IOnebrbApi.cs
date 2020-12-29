@@ -66,7 +66,9 @@ namespace OnebrbApiClient
 
         /// <param name='itemId'>
         /// </param>
-        /// <param name='body'>
+        /// <param name='userId'>
+        /// </param>
+        /// <param name='securityHash'>
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -74,7 +76,7 @@ namespace OnebrbApiClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> DeleteItemWithHttpMessagesAsync(int itemId, EditItemRequestModel body = default(EditItemRequestModel), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> DeleteItemWithHttpMessagesAsync(int itemId, string userId = default(string), string securityHash = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <param name='body'>
         /// </param>
@@ -95,6 +97,18 @@ namespace OnebrbApiClient
         /// The cancellation token.
         /// </param>
         Task<HttpOperationResponse<ItemServiceModelICollectionBaseApiResponse>> GetItemsWithHttpMessagesAsync(string username, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <param name='itemId'>
+        /// </param>
+        /// <param name='body'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<RatingServiceModelBaseApiResponse>> RateWithHttpMessagesAsync(int itemId, RateItemRequestModel body = default(RateItemRequestModel), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
     }
 }

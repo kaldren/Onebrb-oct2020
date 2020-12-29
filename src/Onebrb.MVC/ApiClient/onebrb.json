@@ -93,12 +93,6 @@
           "Items"
         ],
         "operationId": "DeleteItem",
-        "consumes": [
-          "application/json-patch+json",
-          "application/json",
-          "text/json",
-          "application/*+json"
-        ],
         "parameters": [
           {
             "in": "path",
@@ -108,11 +102,14 @@
             "format": "int32"
           },
           {
-            "in": "body",
-            "name": "body",
-            "schema": {
-              "$ref": "#/definitions/EditItemRequestModel"
-            }
+            "in": "query",
+            "name": "userId",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "securityHash",
+            "type": "string"
           }
         ],
         "responses": {
@@ -182,6 +179,49 @@
             "description": "Success",
             "schema": {
               "$ref": "#/definitions/ItemServiceModelICollectionBaseApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/Ratings/{itemId}": {
+      "post": {
+        "tags": [
+          "Ratings"
+        ],
+        "operationId": "Rate",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "itemId",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/RateItemRequestModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/RatingServiceModelBaseApiResponse"
             }
           }
         }
@@ -483,6 +523,49 @@
           "items": {
             "$ref": "#/definitions/ItemServiceModel"
           }
+        }
+      }
+    },
+    "RateItemRequestModel": {
+      "type": "object",
+      "properties": {
+        "itemId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "securityHash": {
+          "type": "string"
+        }
+      }
+    },
+    "RatingServiceModel": {
+      "type": "object",
+      "properties": {
+        "itemId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "value": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "RatingServiceModelBaseApiResponse": {
+      "type": "object",
+      "properties": {
+        "statusCode": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        },
+        "body": {
+          "$ref": "#/definitions/RatingServiceModel"
         }
       }
     }

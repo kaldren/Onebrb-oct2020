@@ -81,7 +81,7 @@ namespace Onebrb.MVC.Controllers
         {
             if (!itemId.HasValue)
             {
-                return View();
+                return View("");
             }
 
             using (var client = new OnebrbApi())

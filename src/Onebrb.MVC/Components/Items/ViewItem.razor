@@ -2,10 +2,10 @@
         <div class="card-header">
             <h4 class="my-0 font-weight-normal">@Item.Title</h4>
             <div class="card-header__options">
-                <button type="submit" class="@BtnEditCss" disabled="@(IsLikeBtnEnabled)">
+                <a href="/items/edit/@Item.Id" class="@BtnEditCss" disabled="@(IsEditBtnEnabled == false)">
                     <i class="fa fa-edit" aria-hidden="true"></i>
-                </button>
-                <button type="submit" class="@BtnDeleteCss" disabled="@(IsLikeBtnEnabled)">
+                </a>
+                <button type="submit" class="@BtnDeleteCss" disabled="@(IsDeleteBtnEnabled == false)" @onclick="@(() => DeleteItem(Item.Id))">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </button>
             </div>
@@ -17,7 +17,7 @@
             </div>
             <div class="item-box__likes">
                 <h6>@Item.Ratings.Where(x => x.Value > 0).Count() likes.</h6>
-                <button type="submit" class="@BtnLikeCss" disabled="@(IsLikeBtnEnabled)"><i class="fas fa-thumbs-up"></i></button>
+                <button type="submit" class="@BtnLikeCss" disabled="@(IsLikeBtnEnabled == false)"><i class="fas fa-thumbs-up"></i></button>
             </div>
             <p>
                 @Item.Description

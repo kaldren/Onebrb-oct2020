@@ -95,11 +95,13 @@ namespace OnebrbApiClient
             /// </param>
             /// <param name='itemId'>
             /// </param>
-            /// <param name='body'>
+            /// <param name='userId'>
             /// </param>
-            public static void DeleteItem(this IOnebrbApi operations, int itemId, EditItemRequestModel body = default(EditItemRequestModel))
+            /// <param name='securityHash'>
+            /// </param>
+            public static void DeleteItem(this IOnebrbApi operations, int itemId, string userId = default(string), string securityHash = default(string))
             {
-                operations.DeleteItemAsync(itemId, body).GetAwaiter().GetResult();
+                operations.DeleteItemAsync(itemId, userId, securityHash).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
@@ -107,14 +109,16 @@ namespace OnebrbApiClient
             /// </param>
             /// <param name='itemId'>
             /// </param>
-            /// <param name='body'>
+            /// <param name='userId'>
+            /// </param>
+            /// <param name='securityHash'>
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteItemAsync(this IOnebrbApi operations, int itemId, EditItemRequestModel body = default(EditItemRequestModel), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteItemAsync(this IOnebrbApi operations, int itemId, string userId = default(string), string securityHash = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.DeleteItemWithHttpMessagesAsync(itemId, body, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.DeleteItemWithHttpMessagesAsync(itemId, userId, securityHash, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <param name='operations'>
@@ -164,6 +168,36 @@ namespace OnebrbApiClient
             public static async Task<ItemServiceModelICollectionBaseApiResponse> GetItemsAsync(this IOnebrbApi operations, string username, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetItemsWithHttpMessagesAsync(username, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='itemId'>
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            public static RatingServiceModelBaseApiResponse Rate(this IOnebrbApi operations, int itemId, RateItemRequestModel body = default(RateItemRequestModel))
+            {
+                return operations.RateAsync(itemId, body).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='itemId'>
+            /// </param>
+            /// <param name='body'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<RatingServiceModelBaseApiResponse> RateAsync(this IOnebrbApi operations, int itemId, RateItemRequestModel body = default(RateItemRequestModel), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.RateWithHttpMessagesAsync(itemId, body, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
