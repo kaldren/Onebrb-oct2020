@@ -48,7 +48,7 @@ namespace Onebrb.Api.Controllers
 
             if (item == null)
             {
-                return NotFound(new BaseApiResponse<ItemServiceModel>
+                return Ok(new BaseApiResponse<ItemServiceModel>
                 {
                     StatusCode = StatusCodes.Status404NotFound,
                     Message = ResponseMessages.NotFound,

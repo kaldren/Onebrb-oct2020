@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Dawn;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -81,13 +82,18 @@ namespace Onebrb.MVC.Controllers
         {
             if (!itemId.HasValue)
             {
-                return View("");
+                return View("Errors/NotFound");
             }
 
             using (var client = new OnebrbApi())
             {
                 client.BaseUri = new Uri(_apiOptions.BaseAddress, UriKind.Absolute);
                 var response = await client.GetItemAsync(itemId.Value);
+
+                if (response.StatusCode == StatusCodes.Status404NotFound)
+                {
+                    return View("Errors/NotFound");
+                }
 
                 ItemServiceModel itemModel = this._mapper.Map<ItemServiceModel>(response.Body);
 
@@ -137,6 +143,11 @@ namespace Onebrb.MVC.Controllers
                 ItemServiceModel itemModel = this._mapper.Map<ItemServiceModel>(response.Body);
 
                 EditItemViewModel editItemViewModel = this._mapper.Map<EditItemViewModel>(itemModel);
+
+                if (editItemViewModel == null)
+                {
+                    return View("Errors/NotFound");
+                }
 
                 // Only the product author is allowed to edit it
                 if (editItemViewModel.UserId != currentUser.Id)
